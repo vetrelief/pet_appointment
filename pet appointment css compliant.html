@@ -1,0 +1,2430 @@
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width">
+<title>VetRelief - Incentive Jobs</title>
+
+<link href="http://vetrelief.com/tmpl/css/Master.css" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="http://vetrelief.com/tmpl/slick-1.8.1/slick/slick.css" />
+<link rel="stylesheet" type="text/css" href="http://vetrelief.com/tmpl/slick-1.8.1/slick/slick-theme.css" />
+<script src="http://vetrelief.com/tmpl/SpryAssets/SpryMenuBar.js" type="text/javascript"></script>
+<script src="http://vetrelief.com/tmpl/Scripts/responsive-menu.js" type="text/javascript"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	// Identify browsers with zero CORS support (old IE) and redirect them right away - to the correct page.
+
+	var authurl = "https://vetrelief.com/";
+
+	// Identify browsers with zero CORS support (old IE) and redirect them right away - to the correct page.
+	if(!('withCredentials' in new XMLHttpRequest())) {
+		if(window.location != authurl) {	window.location.replace(authurl);	}
+	}
+	
+	$('a.login-window').click(function() { return showLoginBox() });
+	
+	// When clicking on the button close or the mask layer the popup closed
+	$('a.close, #mask').live('click', function() { return hideLoginBox() } );
+});
+
+function showLoginBox() {
+	// Getting the variable's value from a link 
+	var loginBox = "#login-box";
+
+	//Fade in the Popup and add close button
+	$(loginBox).fadeIn(300);
+	
+	//Set the center alignment padding + border
+	var popMargTop = ($(loginBox).height() + 24) / 2; 
+	var popMargLeft = ($(loginBox).width() + 24) / 2; 
+	
+	$(loginBox).css({ 
+		'margin-top' : -popMargTop,
+		'margin-left' : -popMargLeft
+	});
+	
+	// Add the mask to body
+	$('body').append('<div id="mask"></div>');
+	$('#mask').fadeIn(300);
+	
+	return false;	
+}
+
+function hideLoginBox() {
+	$('#mask , .login-popup').fadeOut(300 , function() {
+		$('#mask').remove();  
+	}); 
+	return false;
+}
+
+// this is used to prevent the login 'go' button from submitting the form directly
+function testXMLAuth1() {
+	return false;
+}
+
+// this queries the server with the login info, and handles updating the UI or redirecting to the login area.
+function testXMLAuth() {
+	
+	// Determine if the Browser supports CORS or not. This is mostly for the benefit of obsolete Inernet Explorer versions so many people use still.
+	var xmlhttp;
+
+	// Do the Thing.
+	var url = "https://vetrelief.com/login.ajax.phtml";
+
+	// obtain the username and password entered into the Form.
+	var ln = document.getElementById("login").elements.namedItem("VET_AUTH_USER").value;
+	var pw = document.getElementById("login").elements.namedItem("VET_AUTH_PW").value;
+	
+	// copy the CLEAN status from the form.
+	var clean = document.getElementById("login").elements.namedItem("LOGIN_FORM").value;
+	
+	var payload = "LOGIN_FORM=" + clean + "&VET_AUTH_USER=" + ln + "&VET_AUTH_PW=" + pw;
+
+	// begin determining browser specifics
+	if('withCredentials' in new XMLHttpRequest()) {
+		// full support for normal CORS behavior
+		xmlhttp = new XMLHttpRequest();	
+		
+		// NOTE THIS REGISTERS A HOOK
+		xmlhttp.onreadystatechange=function() {
+			if(xmlhttp.readyState==4 && xmlhttp.status==200) {
+				if(xmlhttp.responseText=="TRUE") {
+					// submit the true form.
+					document.getElementById("login").submit();
+				} else {
+					// display the returned error
+					document.getElementById("errorText").innerHTML=xmlhttp.responseText;
+				}
+			}
+		}
+  	
+			
+	} else {		
+		if(typeof XDomainRequest !== "undefined") {
+			// IE Specific CORS support
+			xmlhttp = new XDomainRequest();
+			// this is the mode detected by IE8
+		} else {
+			// early IE
+			xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		function onload_ie() {
+			if(xmlhttp.responseText=="TRUE") {
+				// submit the true form.
+				document.getElementById("login").submit();
+			} else {
+				// display the returned error
+				document.getElementById("errorText").innerHTML=xmlhttp.responseText;
+			}	
+		}
+		
+		xmlhttp.onload=onload_ie;
+		xmlhttp.onprogress=onload_ie;
+		xmlhttp.onerror=function () { document.getElementById("errorText").innerHTML="err"; }
+		xmlhttp.ontimeout=function () { document.getElementById("errorText").innerHTML="timeout"; }
+	}
+
+	xmlhttp.open("POST",url,true);
+
+	// IE doesn't want this either.
+	if('withCredentials' in new XMLHttpRequest()) {
+		// send the data
+		xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		xmlhttp.setRequestHeader("Content-length", payload.length);
+		xmlhttp.setRequestHeader("Connection", "close");
+	}
+
+	xmlhttp.send(payload);
+	// we're done requesting data from the server - the state change hook above will catch the response.
+
+	// blank the error text to make the retry more apparent.
+	document.getElementById("errorText").innerHTML="Please Wait ...";
+} // end testXMLAuth()
+
+
+
+</script>
+<style>
+
+.GenLayout #LoginFormJS  {
+	float: left;
+	font-size: 12px;
+}
+
+#LoginForm  {
+	background-image: url(http://vetrelief.com/tmpl/image_roto/);
+	background-repeat: no-repeat;
+	background-position: right top;
+	height: 440px;
+	width: 100%;
+	padding: -10px;
+	z-index: auto;
+	position: relative;
+}
+
+.columnBox{
+	width:490px;
+}
+
+.padleft {
+	padding-left: 10px;
+	padding-top: 20px;
+}
+
+/* Mask for background, by default is not display */
+#mask {
+	display: none;
+	background: #000;
+	position: fixed;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	width: 100%;
+	height: 100%;
+	opacity: 0.8;
+	z-index: 999;
+}
+
+/* You can customize to your needs  */
+.login-popup {
+	font-family:"Trebuchet MS", Optima, Helvetica, sans-serif;
+	width: 300px;
+	display: none;
+	background-color: #004455;	// ie8 does not support transparency (or maybe its that XP doesnt)
+	padding: 10px;
+	border: 2px solid #ddd;
+	float: left;
+	font-size: 1.2em;
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 99999;
+	box-shadow: 0px 0px 20px #999;
+	/* CSS3 */
+	-moz-box-shadow: 0px 0px 20px #999;
+	/* Firefox */
+	-webkit-box-shadow: 0px 0px 20px #999;
+	/* Safari, Chrome */
+	border-radius: 5px;
+	-moz-border-radius: 3px;
+	/* Firefox */
+	-webkit-border-radius: 3px;
+	/* Safari, Chrome */;
+}
+
+img.btn_close {
+ 	Position the close button  
+ 	float: right;
+	margin: -28px -28px 0 0;
+}
+
+fieldset {
+	border: none;
+}
+
+form.signin .textbox label {
+	display: block;
+	padding-bottom: 7px;
+}
+
+form.signin .textbox span {
+	display: block;
+}
+
+form.signin p, form.signin span {
+	color: rgba(251,247,247,1.00);
+	font-size: 11px;
+	line-height: 18px;
+}
+
+form.signin .textbox input {
+	background: #666666;
+	border-bottom: 1px solid #333;
+	border-left: 1px solid #000;
+	border-right: 1px solid #333;
+	border-top: 1px solid #000;
+	color: #fff;
+	border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	font: 13px Arial, Helvetica, sans-serif;
+	padding: 6px 6px 4px;
+	width: 200px;
+}
+
+ form.signin input:-moz-placeholder {
+ color: #bbb;
+ text-shadow: 0 0 2px #000;
+}
+
+ form.signin input::-webkit-input-placeholder {
+ color: #bbb;
+ text-shadow: 0 0 2px #000;
+}
+
+.button {
+	padding: 6px 6px 4px;
+	margin-top: 10px;
+	width: 50px;
+	float: left;
+	background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#dddddd));
+	background: -o-linear-gradient(top, #f3f3f3, #dddddd);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#dddddd');
+	border-color: #000;
+	border-width: 1px;
+	border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	color: #333;
+	cursor: pointer;
+	display: inline-block;
+}
+
+.button h2{
+	padding-left:10px;
+}
+
+.button:hover {
+	background: rgba(249,184,32,1.00);
+}
+
+.forgot {
+	color: rgba(248,244,244,1.00);
+	margin-top: 10px;
+	float: left;
+	width:100%;
+}
+a.forgot{
+	font-size: .7em;
+}
+.forgot a:link {
+
+	text-decoration:none;
+	color:rgba(248,186,12,1.00)
+}
+
+.logintext {
+	float: left;
+	color: rgba(252,245,245,1.00);
+	width: 75%;
+	margin-top: 10px;
+}
+
+.login {
+	margin: 4px;
+	float: left;
+	background-color: rgba(226,224,224,.1);
+	height: 120px;
+	font-family: "Trebuchet MS", Optima, Helvetica, sans-serif;
+	font-size:16px;
+	line-height:21px;
+}
+
+.login a:link {
+	display: block;
+	text-decoration:none;
+	color:rgba(77,200,243,1.00);
+}
+
+.login a:hover {
+	display: block;
+	text-decoration:none;
+	color:rgba(250,248,248,1.00);
+}
+
+
+.button {
+	padding: 6px 6px 4px;
+	margin-top: 10px;
+	width: 220px;
+	float: left;
+	background: -moz-linear-gradient(center top, #f3f3f3, #dddddd);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#dddddd));
+	background: -o-linear-gradient(top, #f3f3f3, #dddddd);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#f3f3f3', EndColorStr='#dddddd');
+	border-color: #000;
+	border-width: 1px;
+	border-radius: 4px 4px 4px 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	color: #333;
+	cursor: pointer;
+	display: inline-block;
+	color:rgba(77,200,243,1.00);
+	}
+
+.button:hover {
+	background:rgba(77,200,243,1.00);
+}
+
+#go{
+	width:50px;
+}
+#vetlogin {
+	background-repeat: no-repeat;
+	height: 120px;
+
+}
+#hosplogin {
+	background-repeat: no-repeat;
+	height: 120px;
+
+}
+
+#handbook {
+	background-repeat: no-repeat;
+	height: 120px;
+
+}
+
+
+#register {
+	background-repeat: no-repeat;
+	height: 120px;
+
+}
+
+#register p a{
+	
+}
+
+.close{
+	float:right;
+}
+
+</style>
+
+<!--Override VetRelief css.-->
+	<style type="text/css">
+		.GenLayout #container
+									{height: auto}
+		.GenLayout #mainContent
+									{width: 1000px; height: auto; padding: 0px}
+
+		.GenLayout #mainContent,
+		.GenLayout #mainContent table
+									{font-size: inherit}
+
+		.GenLayout #mainContent h3
+									{color: black}
+
+		/* html,body			{height: 99%} */
+
+		/* There's some shenanigans where adjacent borders merge into one, and there's no elegant way to fix it. Increase div height to work around it. */
+		/* .lookingdivs			{height: 45%} */
+
+		.lookingdivs,
+		#lookingdata			{width: 80%; margin: auto}
+
+		/*#lookingdata			{border-collapse: collapse}*/
+
+		/*#lookingdata	th, #lookingdata td
+									{border: 1px solid black}*/
+
+		#lookingdata th		{border: none}
+		#lookingdata td		{padding: 2px}
+
+		.looking1				{text-align: center; width: auto; /* position: relative */}
+		.looking2				{}
+
+		/* #image,#message	{margin: 0px 30px 0px -20px} */
+
+		#image					{ /* float: left */ display: inline-block; width: 268.5; height: 270; margin-top: 20px; margin-bottom: -15px}
+		#message				{ /* float: right; position: absolute; background-image: linear-gradient(lightskyblue, white); */
+										display: inline-block; width: 400px; left: 50%; top: 230px; padding-top: 1%; padding-bottom: 1%;
+									}
+		#message h1,
+		#message h3		{/* display: inline */}
+		.looking2 p,
+		.looking2 h1,
+		.looking2 h3			{text-align: center; /*margin: 20px 20px 10px 20px; border-bottom: 1px solid gray;*/ padding: 10px}
+		
+		#mainContent .looking2 p:last-of-type
+									{border-bottom: 1px solid gray}
+
+		#badges				{display: flex; justify-content: center; align-items: center}
+		#badges p				{display: inline-block}
+		#badges img,#badges a
+									{border-radius: 13px; text-align: center}
+		#badges a				{display: inline-block; overflow: hidden}
+		#apple img,#apple a
+									{height: 64px; width: 190px}
+		#google img,#google a
+									{height: 96px; width: 248px}
+		#apple a				{margin: 16px}
+
+		#badgemessage	{text-align: center; margin-top: 40px}
+
+		.section2_content 		{margin-left: 10px; padding: 1px 30px; display: table; padding-bottom: 30px}
+		.section2_leftpart,
+		.section2_rightpart 	{width: 30%; float: left; margin: auto 15px}
+		.section2_centerpart	{width: 30%; float: left;}
+		.section2_img 			{display: block; width: 100%; margin: auto}
+
+		.section3_centerpart 	{width: 60%; display: block; margin: auto; padding: 9px}
+		.form_title 				{text-align: center}
+		
+		.form_section3 h1:first-child
+										{margin-bottom:-15px}
+		
+		#myForm					{background-color: cccccc; padding: 9px}
+		#myForm label			{display: inline-block; width: 305px; text-align: left; vertical-align: top; /*font-family: "Trebuchet MS", Optima, Helvetica, sans-serif; font-size: 12px*/}
+		/*#myForm input:nth-last-child(1n+3),*/
+		#myForm textarea,
+		#myForm select			{width: 180px}
+		.buttonholder				{text-align: center}
+
+		#myForm textarea,
+		#myForm input,
+		#myForm select			{margin: 2px 0px}
+		
+		#myForm p				{text-align: center}
+
+		/* New CSS. */
+		#myForm					{border-radius: 20px; background-image: linear-gradient(to bottom right, deepskyblue, lightblue)}
+
+		.cartoon					{position: relative; left: 400; top: 38; margin-top: -180}
+		
+		#customlightbox64 .clearboth
+										{clear: both}
+
+		#customlightbox64 .center
+										{text-align: center}
+		
+		#customlightbox64bg
+										{position: fixed; z-index: 1001; top: 0%; left: 0%; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.50)}
+		#customlightbox64
+										{position: fixed; z-index: 1002; top: 40%; left: 50%; width: 400px;
+										background-image: linear-gradient(to bottom right, lightblue, deepskyblue); padding: 16px; margin-top: -160px; margin-left: -200px;
+										overflow: auto; border: 1px solid black; border-radius: 10px}
+		#choosedate64			{position: fixed; z-index: 1002; top: 74%; left: 50%; width: 400px;
+										background-image: linear-gradient(to bottom right, lightblue, deepskyblue); padding: 16px; margin-top: -160px; margin-left: -200px;
+										overflow: auto; border: 1px solid black; border-radius: 10px}
+		#customlightbox64bg #choosedate64 > span
+										{width: 43%}
+		#customlightbox64bg #choosedate64 > span input
+										{margin: 0px 0px 7px}
+		#choosedate64 span h3
+										{margin: 0px 0px 7px}
+		#choosedate64 #monthslist64,
+		#choosedate64 #dateslist64 span,
+		#choosedate64 #timelist64 span
+										{background: white}
+		#customlightbox64.laterlightbox64
+										{top: 19%}
+		#customlightbox64 span:not(.noborder)
+										{background: white}
+		.customlightbox64left
+										{float: left; width: 50%}
+		.customlightbox64right
+										{float: right; width: 50%; text-align: right}
+		#myForm #customlightbox64 .noborder
+										{border: none}
+		#myForm #customlightbox64 .fullwidth
+										{width: 100%}
+
+		#myForm #customlightbox64 span
+										{border: 1px solid black; border-radius: 10px; width: auto; font-size: 12px; padding: 4px}
+		#myForm #customlightbox64 .availablenow
+										{border-radius: initial}
+		#myForm #customlightbox64 span h3,
+		#myForm #customlightbox64 span h4
+										{margin: 7px}
+		#myForm #customlightbox64 span p
+										{margin: 0px; margin-top: -4px}
+		#myForm #customlightbox64 div
+										{margin: 10px 0px}
+
+		#myForm #customlightbox64 #customlightbox64x
+										{font-size: 28; font-weight: bold; margin-top: -9px; width: 42px; height: 42px}
+		#myForm #customlightbox64 #customlightbox64about
+										{height: 96px}
+		#myForm #customlightbox64 #customlightbox64contact,
+		#myForm #customlightbox64 #customlightbox64payment
+										{width: 70%}
+		/*#myForm #customlightbox64 #customlightbox64reviews span:first-child
+										{margin-bottom: -16px}
+		#myForm #customlightbox64 #customlightbox64reviews span:nth-child(-n+4)
+										{margin-left: -6px}*/
+		#myForm #customlightbox64 #customlightbox64reviews span span h4
+										{margin: 0px 20px}
+		#myForm #customlightbox64 #customlightbox64reviews #lightbox64innerreviewbox #reviewofreviews64
+										{float: right}
+		#myForm #customlightbox64 .lightbox64reviewarrow
+										{position: absolute; left: 0; width: 100%; text-align: center; cursor: pointer}
+		#myForm #customlightbox64 #lightbox64reviewarrowup
+										{margin-top: -24px}
+		#myForm #customlightbox64 #lightbox64reviewarrowdown
+										{bottom: 2px}
+		#myForm #customlightbox64 #lightbox64reviewbox
+										{height: 96px; overflow: auto; padding: 0px}
+		#myForm #customlightbox64 #lightbox64innerreviewbox
+										{margin: 0px}
+		#myForm #customlightbox64 #lightbox64reviewbox.noscroll
+										{overflow: hidden}
+
+		/* Firefox scrollbar. */
+		.formvets, #dateslist, #customlightbox64bg
+										{scrollbar-color: lightblue white; /*scrollbar-width: thin;*/
+		/* IE scrollbar. */
+										scrollbar-face-color: lightblue; scrollbar-shadow-color: white; scrollbar-arrow-color: lightblue}
+		/* Chrome, Safari, and Edge scrollbar. */
+		.formvets::-webkit-scrollbar,
+		#dateslist::-webkit-scrollbar,
+		#dateslist64::-webkit-scrollbar,
+		#timelist64::-webkit-scrollbar,
+		#lightbox64reviewbox::-webkit-scrollbar
+										{background: white}
+		.formvets::-webkit-scrollbar-thumb,
+		#dateslist::-webkit-scrollbar-thumb,
+		#dateslist64::-webkit-scrollbar-thumb,
+		#timelist64::-webkit-scrollbar-thumb,
+		#lightbox64reviewbox::-webkit-scrollbar-thumb
+										{background: lightblue}
+		.formvets::-webkit-scrollbar-button,
+		#timelist64::-webkit-scrollbar-button,
+		#lightbox64reviewbox::-webkit-scrollbar-button
+										{border-style: solid; height: 10px; width: 16px}
+		#dateslist::-webkit-scrollbar-button,
+		#dateslist64::-webkit-scrollbar-button
+										{border-style: solid; height: 16px; width: 10px}
+		.formvets::-webkit-scrollbar-button:vertical:decrement,
+		#dateslist::-webkit-scrollbar-button:vertical:decrement,
+		#dateslist64::-webkit-scrollbar-button:vertical:decrement,
+		#timelist64::-webkit-scrollbar-button:vertical:decrement,
+		#lightbox64reviewbox::-webkit-scrollbar-button:vertical:decrement
+										{border-width: 0 9px 8px 9px; border-color: transparent transparent lightblue transparent}
+		.formvets::-webkit-scrollbar-button:vertical:increment,
+		#dateslist::-webkit-scrollbar-button:vertical:increment,
+		#dateslist64::-webkit-scrollbar-button:vertical:increment,
+		#timelist64::-webkit-scrollbar-button:vertical:increment,
+		#lightbox64reviewbox::-webkit-scrollbar-button:vertical:increment
+										{border-width: 8px 9px 0 9px; border-color: lightblue transparent transparent transparent}
+		.formvets::-webkit-scrollbar-button:horizontal:decrement,
+		#dateslist::-webkit-scrollbar-button:horizontal:decrement,
+		#dateslist64::-webkit-scrollbar-button:horizontal:decrement,
+		#timelist64::-webkit-scrollbar-button:horizontal:decrement,
+		#lightbox64reviewbox::-webkit-scrollbar-button:horizontal:decrement
+										{border-width: 9px 8px 9px 0; border-color: transparent lightblue transparent transparent}
+		.formvets::-webkit-scrollbar-button:horizontal:increment,
+		#dateslist::-webkit-scrollbar-button:horizontal:increment,
+		#dateslist64::-webkit-scrollbar-button:horizontal:increment,
+		#timelist64::-webkit-scrollbar-button:horizontal:increment,
+		#lightbox64reviewbox::-webkit-scrollbar-button:horizontal:increment
+										{border-width: 9px 0 9px 8px; border-color: transparent transparent transparent lightblue}
+
+		#myForm span			{display: inline-block; vertical-align: top; margin-left: auto; margin-right: auto; width: 70%}
+		#myForm .formleft		{text-align: left}
+		#myForm .formright	{text-align: right}
+
+		#dateslist, #timelist, #dateslist64, #timelist64
+										{margin-top: 4px; margin-bottom: 4px}
+		#dateslist span, #dateslist64 span
+										{width: 10%}
+		#timelist span, #timelist64 span
+										{width: 19%; height: 100px}
+		#timelist64 span		{width: 18.8%}
+		#dateslist span, #dateslist64 span,
+		#timelist span, #timelist64 span,
+		#monthslist, #monthslist64
+										{text-align: center; border: 1px solid blue; border-radius: 6px; margin: 2px}
+		#monthslist, #monthslist64
+										{height: 40px; padding: 8px}
+		#monthslist span, #monthslist64 span
+										{width: 30%}
+		.montharrow				{font-size: 2em; margin-top: -8px}
+		#dateslist, #dateslist64
+										{overflow: scroll; white-space: nowrap; overflow-y: hidden; padding-bottom: 2px}
+		#timelist64				{max-height: 208px; overflow: auto}
+
+		.formvets					{background-image: url("World.png"); background-repeat: no-repeat; background-size: 562px 562px; background-position: -12px 0px}
+
+		#formvetsnow span,
+		#formvetslater span	{background-color: rgba(255, 255, 255, 0.75)}
+
+		.doctoravatar				{border-radius: 50%}
+
+		#choicecontainer,
+		#chooseVetnow .formvets,
+		#chooseVetlater .formvets
+										{width: 563px; height: 563px; overflow: auto}
+		#chooseVetnow .formvets span,
+		#chooseVetlater .formvets span
+										{display: inline-block; width: 32.96%; height: 200px; text-align: left; border: thin solid; margin: 1px 1px; padding: 7px;
+											/*background-size: 150px; background-position: center; background-repeat: no-repeat*/}
+		#chooseVetnow .formvets span div
+										{height: 50%; position: relative}
+		#chooseVetlater .formvets span div
+										{height: 50%; position: relative}
+		#chooseVetnow .formvets span h3,
+		#chooseVetlater .formvets span h3
+										{margin: 0px}
+		#chooseVetnow .formvets span h4,
+		#chooseVetlater .formvets span h4
+										{margin: 7px 0px}
+		#chooseVetnow .formvets span p,
+		#chooseVetlater .formvets span p
+										{text-align: left; margin: 8px 0px}
+		#chooseVetnow .formvets span div img,
+		#chooseVetlater .formvets span div img
+										{width: 75px; height: 75px; vertical-align: bottom; position: absolute; bottom: 0; left: 0}
+		#chooseVetnow .formvets span h3,
+		#chooseVetlater .formvets span h3,
+		#chooseVetnow .formvets span h4,
+		#chooseVetlater .formvets span h4,
+		#chooseVetnow .formvets span p,
+		#chooseVetlater .formvets span p
+										{font-size: 12px}
+
+		#chooseVetnow .formvets span .learnmore,
+		#chooseVetlater .formvets span .learnmore
+										{text-align: center; width: 100%; position: absolute; bottom: -17; text-decoration: underline; cursor: pointer; z-index: 10}
+
+		#chooseVetnow .formvets .availablenow,
+		#customlightbox64 .availablenow
+										{position: relative; font-weight: bold; text-align: center; color: white;
+										 height: 20px; margin-left: 80px; margin-bottom: -8px; width: 55%; margin-top: -9px; line-height: 18px}
+		/* Color needs to be put here due to specificity issues with the customlightbox64 availablenow. */
+		#chooseVetnow .formvets .availablenow,
+		#customlightbox64 .availablenow,
+		#customlightbox64 span.availablenow
+										{background-image: linear-gradient(lightblue, darkblue)}
+
+		/* Diamond shaped badge.
+		#chooseVetnow .formvets .availablenow::before
+										{border-top: 15px solid darkblue; border-left: 45px solid transparent; border-right: 45px solid transparent; content: "";
+										height: 0; left: 0; position: absolute; bottom:-15px; width: 0}
+		*/
+		#chooseVetnow .formvets .availablenow p,
+		#customlightbox64 .availablenow
+										{text-align: center; margin: 2px; padding-top: 1px; position: relative}
+
+		#chooseVetnow .formvets span .vetmiscellaneous,
+		#chooseVetlater .formvets span .vetmiscellaneous
+										{width: 50%; height: auto; text-align: center; vertical-align: bottom; position: absolute; bottom: 0; right: 0; text-decoration: underline}
+		#chooseVetnow .formvets span .vetmiscellaneous h4,
+		#chooseVetlater .formvets span .vetmiscellaneous h4
+										{cursor: pointer}
+
+		#formvetsnow .selected,
+		#formvetslater .selected,
+		#dateslist .selected,
+		#timelist .selected,
+		#choosedate64 #dateslist64 span.selected,
+		#choosedate64 #timelist64 span.selected
+										{background-color: rgba(255, 255, 255, 0.2); text-shadow: -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF}
+
+		#formvetsnow span:hover:not(.selected),
+		#formvetslater span:hover:not(.selected),
+		#dateslist span:hover,
+		#timelist span:hover,
+		#choosedate #monthslist .montharrow:hover,
+		#choosedate64 #monthslist64 .montharrow:hover,
+		#choosedate64 #dateslist64 span:hover:not(.selected),
+		#choosedate64 #timelist64 span:hover:not(.selected)
+										{background-color: rgba(255, 255, 255, 0.2); cursor: pointer}
+		#customlightbox64 #customlightbox64x,
+		#choosedate64 #monthslist64 .montharrow,
+		#choosedate64 #dateslist64 span,
+		#choosedate64 #timelist64 span
+										{cursor: pointer}
+		#formvetsnow .selected .availablenow
+										{color: inherit}
+
+		/* When we convert the hidden inputs to text inputs, we need to convey their meaning without disrupting the code that manages them. */
+		#hiddeninputs			{text-align: center}
+		/*#hiddeninputs input[type="text"]
+										{width: 26px}*/
+		#hiddeninputs span	{padding: 4px}
+
+		.formhidden				{display: none}
+	</style>
+	<!--End of Override CSS.-->
+	
+	</head>
+
+<body  class="GenLayout">
+		<div id="container">
+  
+    
+  <div id="header">
+     <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr align="left">
+        <td>
+        	<img src="http://vetrelief.com/tmpl/images/VR Header2.gif" width="345" height="137">
+        
+        </td>
+        <td width="64%"><img src="http://vetrelief.com/tmpl/image_roto/Quotes.14.gif" alt="" name="rotate" width="648" height="137" align="right" id="rotate" style="background-color: #000000" /></td>
+      </tr>
+    </table>
+   </div><!-- end #header -->
+
+<div id="Menu">
+	<ul id="MenuBar1" class="MenuBarHorizontal MenuBarActive">
+		<li><a href="http://vetrelief.com/finfo.phtml" class="MenuBarItemSubmenu">Veterinary Facility</a>
+			<ul>
+				<li><a href="http://vetrelief.com/finfo.phtml">How It Works?</a></li>
+				<li><a href="http://vetrelief.com/postjob.phtml">Post A Job</a></li>
+    			</ul>
+		</li>
+		<li><a href="http://vetrelief.com/pinfo.phtml" class="MenuBarItemSubmenu">Relief Veterinarian</a>
+			<ul>
+				<li><a href="http://vetrelief.com/pinfo.phtml">How It Works?</a></li>
+				<li><a href="http://vetrelief.com/search.phtml">Search Jobs</a></li>
+			</ul>
+		</li>
+
+<li><a href="http://vetrelief.com/specialists.phtml" class="MenuBarItemSubmenu">Mobile Specialist&nbsp;<font color="#990000">new</font></a>
+			<ul>
+				<li><a href="http://vetrelief.com/specialists.phtml">How It Works?</a></li>
+			</ul>
+		</li>
+
+		
+		<li><a href="http://vetrelief.com/#" class="MenuBarItemSubmenu">Vets2Vets</a>
+			<ul>
+				<li><a href="http://vetrelief.com/apps.phtml">Get the App</a></li>
+			        <li><a href="http://vetrelief.com/boost.phtml">Boost Your Post</a></li>				
+				<li><a href="http://vetrelief.com/specialists.phtml">Mobile Specialists&nbsp;<font color="#990000">new</font></a></li>
+				<li><a href="http://vetrelief.com/downloads.phtml">Download Forms</a></li>
+				<li><a href="http://vetrelief.com/for_sale.phtml">Hospitals for Sale</a></li>
+				<li><a href="http://vetrelief.com/cancelation.phtml">Cancelation Guidelines</a></li>
+				<li><a href="http://vetrelief.com/resources.phtml">Industry Ads & Enterprise</a></li>
+			</ul>
+		</li>
+		<li><a href="http://vetrelief.com/faq.phtml">FAQ</a></li>
+		<li><a href="http://vetrelief.com/register.phtml">Create an Account</a></li>
+		<li><a href="http://vetrelief.com/login_form.phtml" class="login-window">Login</a></li>
+		<li><a href="http://vetrelief.com/contact.phtml">Contact Us</a></li>
+	</ul>
+</div>
+<div id="Menu-responsive">
+	<div class="responsive-menu-title">Menu <span class="caret"></span></div>
+	<ul class="menu-ul-responsive">
+		<li class="dropdown"><a href="#">Veterinary Facility <span class="caret"></span></a>
+			<ul>
+				<li><a href="http://vetrelief.com/finfo.phtml">How It Works?</a></li>
+				<li><a href="http://vetrelief.com/postjob.phtml">Post A Job</a></li>
+			</ul>
+		</li>
+		<li class="dropdown"><a href="#">Relief Veterinarian <span class="caret"></span></a>
+			<ul>
+				<li><a href="http://vetrelief.com/pinfo.phtml">How It Works?</a></li>
+				<li><a href="http://vetrelief.com/search.phtml">Search Jobs</a></li>
+			</ul>
+		</li>
+		<li><a href="http://vetrelief.com/register.phtml">Create an Account</a></li>
+		<li class="dropdown"><a href="#">Vets2Vets <span class="caret"></span></a>
+			<ul>
+				<li><a href="http://vetrelief.com/downloads.phtml">Download Forms</a></li>
+				<li><a href="http://vetrelief.com/for_sale.phtml">Hospitals for Sale</a></li>
+				<li><a href="http://vetrelief.com/cancelation.phtml">Cancelation Policy</a></li>
+				<li><a href="http://vetrelief.com/resources.phtml">Enterprise</a></li>
+			</ul>
+		</li>
+		<li><a href="http://vetrelief.com/faq.phtml">FAQ</a></li>
+		<li><a href="http://vetrelief.com/contact.phtml">Contact</a></li>
+		<li><a href="http://vetrelief.com/login_form.phtml" class="login-window">Login</a></li>
+	</ul>
+</div><div id="container">
+<p id="error" class="errorText"> </p>
+	
+<style>
+	.login-header-text {
+		text-align: center;
+		color: #FFF;
+		padding-top: 10px;
+	}
+	@media (max-width: 728px) {
+		.logintext,
+		label.username,
+		#loginP2,
+		#loginP {
+			float: none;
+			width: 100%;
+			margin: 5px 0;
+		}
+		.button#go {
+			float: none;
+			text-align: center;
+			width: 100%;
+			background: none;
+			padding: 0;
+		}
+		.button#go input {
+			border: 5px solid #f3f3f3;
+			border-radius: 10px;
+		}
+		a.forgot {
+			font-size: 1em;
+		}
+		#mask {
+			opacity: 1;
+		}
+	}
+	</style><div id="login-box" class="login-popup"> <a href="#" class="close"><img src="login/images/close_pop.png" class="btn_close right" title="Close Window" alt="Close" /></a>
+		<div class='login-header-text'>Please Login</div> <br><div class="errorText" id="errorText"></div><br>
+		<form id="login" name="login" method="post" action="https://vetrelief.com/login.phtml" onsubmit="return testXMLAuth1();">
+		<input type="hidden" name="LOGIN_FORM" value="" /><input type="hidden" name="page" value="IncentiveJobs">	  <fieldset class="textbox">
+		  <div class="logintext">
+			<label class="username"> <span>Username</span>
+			  <input name="VET_AUTH_USER" type="text" id="loginP2" size="11" placeholder="Login">
+			</label>
+			<label class="password"> <span>Password</span>
+			  <input name="VET_AUTH_PW" type="password" id="loginP" size="11" placeholder="Password">
+			</label>
+		  </div>
+		  <div class="button" id="go">
+			<input name="submit" type="image" src="http://vetrelief.com/tmpl/images2/Go_Button.png" alt="submit"  onclick="testXMLAuth()" width="50" height="50">
+		  </div>  <p><a class="forgot" href="http://vetrelief.com/reset.phtml">Forgot your password?</a></p>	  <p><a class="forgot" href="http://vetrelief.com/register.phtml">New to VetRelief.com? Create an Account.</a></p>
+		</fieldset>
+		
+		  
+	  </form>
+	</div>
+	<!-- Begin. -->
+	<div id="mainContent">
+	<div class="lookingdivs looking1">
+		<img id="image" src="OFFICIAL VRS VRTL LOGO 111.png" />
+		<!-- <span id="message"> We're going to have the logo centered now. -->
+			<!-- Normally an h1 and an h3 goes here. Leaving this span keeps the image to the left, consistent with other pages. -->
+		<!-- </span> -->
+	</div>
+	<div class="lookingdivs looking2">
+		<br />
+		<h1></h1>
+
+		<p>Setting up an appointment.</p>
+
+		<br />
+	</div>
+	<div class="form_section3">
+		<div class="section3_centerpart">
+			<img src="" class="cartoon" />
+			<form method="POST" action="sendmail.php" enctype="multipart/form-data" id="myForm" autocomplete="off">
+				<span class="formLeft">
+					<h3>When would you like your appointment?</h3>
+				</span>
+				<br />
+				<span class="formRight" id="choice1">
+					<input type="radio" name="customdate" value="asap" onchange="setChoice2()" checked="checked"><label>As soon as possible.</label><br />
+					<input type="radio" name="customdate" value="later" onchange="setChoice2()"><label>Schedule for later.</label>
+				</span>
+				<hr />
+				<span class="formright" id="choice2">
+
+				</span>
+				<hr />
+				<div id="choicecontainer">
+					<div id="talkfirstvet">
+						<p>To quickly connect with the first available veterinarian, select Submit below. We will notify you as soon as a veterinarian confirms.</p>
+					</div>
+					<div id="choosevetnow" class="formhidden">
+						<div id="formvetsnow" class="formvets">
+						</div>
+					</div>
+					<div id="choosevetlater" class="formhidden">
+						<div id="formvetslater" class="formvets">
+						</div>
+					</div>
+					<div id="choosedate" class="formhidden">
+						<div id="monthslist">
+						</div>
+						<div id="dateslist">
+						</div>
+						<div id="timelist">
+						</div>
+					</div>
+				</div>
+				<div id="hiddeninputs"></div>
+				<div class="buttonholder">
+					<input id="formsubmit" class="form_btn" type="submit" value="Submit">
+				</div>
+			</form>
+			<!-- We'll be using a "formhidden" class in the css that we can use to hide sections we're not viewing. -->
+			<script>
+				var animalBox = document.getElementsByClassName("cartoon")[0];
+				function selectAnimal()
+				{
+					var start = window.location.search.indexOf("character=");
+					var end = window.location.search.indexOf("&", start);
+					if(end == -1)	//If there's no more &'s, we'll take it until the end.
+					{
+						end = undefined;
+					}
+					var animal = window.location.search.substring(start, end);
+					
+					return animal.substring(animal.indexOf("=") + 1);
+				}
+
+				function applyAnimal(animal)
+				{
+					switch(animal)
+					{
+						default:
+							applyAnimal("Bird");
+							break;
+						case "Amphibian":
+						case "Bird":
+						case "Cat":
+						case "Dog":
+						case "Fish":
+						case "Horse":
+						case "Iguana":
+						case "Pig":
+						case "Rabbit":
+						case "Rodent":
+						case "Snake":
+							animalBox.setAttribute("id", animal.toLowerCase());
+							animalBox.src = "small" + animal + ".png";
+							break;
+					}
+					return animal;
+				}
+
+				applyAnimal(selectAnimal());
+
+				var customlightbox64whole;
+				var choosedate64, monthslist64, dateslist64, timelist64, bookbutton64, reviewindex64, innerreviewbox64, interval64, position64, position64offset;
+				function buildcustomlightbox64(i, availablenow)
+				{
+					if(availablenow)
+					{
+						var whichvets = "now";
+					}
+					else
+					{
+						var whichvets = "later";
+					}						
+
+					var customlightbox64bg = document.createElement("div");
+					customlightbox64bg.setAttribute("id", "customlightbox64bg");
+
+					var customlightbox64 = document.createElement("div");
+					customlightbox64.setAttribute("id", "customlightbox64");
+					if(!availablenow)
+					{
+						customlightbox64.setAttribute("class", "laterlightbox64");
+					}
+					customlightbox64bg.appendChild(customlightbox64);
+
+					var lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("class", "customlightbox64left");
+
+					var span = document.createElement("span"),
+					span2;
+
+					span.setAttribute("id", "customlightbox64doctor");
+					span.setAttribute("class", "fullwidth");
+
+					var h = document.createElement("h3");
+					h.appendChild(document.createTextNode(vets[whichvets][i].name));
+					span.appendChild(h);
+
+					h = document.createElement("h4");
+					h.appendChild(document.createTextNode(vets[whichvets][i].sub));
+					span.appendChild(h);
+
+					h = document.createElement("h4");
+					h.appendChild(document.createTextNode(vets[whichvets][i].city + ", " + vets[whichvets][i].state));
+					span.appendChild(h);
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("class", "customlightbox64right");
+
+					if(availablenow)
+					{
+						span = document.createElement("span");
+						span.setAttribute("class", "availablenow");
+						var p = document.createElement("p");
+						p.appendChild(document.createTextNode("Available Now"));
+
+						span.appendChild(p);
+						lightboxdiv.appendChild(span);
+					}
+
+					span = document.createElement("span");
+					span.setAttribute("id", "customlightbox64x");
+					span.setAttribute("class", "center");
+					span.appendChild(document.createTextNode("X"));
+					if(availablenow)
+					{
+						span.onclick = function()
+						{
+							myForm.removeChild(customlightbox64whole);
+							//Some things need to be explicitly wiped or restored when we exit the popup.
+							customlightbox64whole = null;
+							monthspan = document.getElementById("monthslist").getElementsByTagName("span")[1];
+						}
+					}
+					else
+					{
+						span.onclick = function()
+						{
+							formsubmit.disabled = true;
+
+							myForm.removeChild(customlightbox64whole);
+							//Some things need to be explicitly wiped or restored when we exit the popup.
+							customlightbox64whole = null;
+							monthspan = document.getElementById("monthslist").getElementsByTagName("span")[1];
+						}
+					}
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("class", "clearboth");
+
+					span = document.createElement("span");
+					span.setAttribute("class", "noborder");
+					span.appendChild(document.createTextNode("About me:"));
+
+					lightboxdiv.appendChild(span);
+					lightboxdiv.appendChild(document.createElement("br"));
+
+					span = document.createElement("span");
+					span.setAttribute("id", "customlightbox64about");
+					span.setAttribute("class", "fullwidth");
+					span.appendChild(document.createTextNode(vets[whichvets][i].desc));
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+
+					span = document.createElement("span");
+					span.setAttribute("class", "customlightbox64price");
+					span.appendChild(document.createTextNode("$" + vets[whichvets][i].price));
+
+					lightboxdiv.appendChild(span);
+
+					span = document.createElement("span");
+					span.setAttribute("id", "perappointment");
+					span.setAttribute("class", "noborder");
+					span.appendChild(document.createTextNode("/ appointment"));
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("class", "customlightbox64left center");
+
+					span = document.createElement("span");
+					span.setAttribute("class", "noborder");
+					span.appendChild(document.createTextNode("Preferred Contact Methods"));
+
+					lightboxdiv.appendChild(span);
+
+					span = document.createElement("span");
+					span.setAttribute("id", "customlightbox64contact");
+					span.appendChild(document.createTextNode(vets[whichvets][i].contacts));
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("class", "customlightbox64right center");
+
+					span = document.createElement("span");
+					span.setAttribute("class", "noborder");
+					span.appendChild(document.createTextNode("Payment Methods Accepted"));
+
+					lightboxdiv.appendChild(span);
+
+					span = document.createElement("span");
+					span.setAttribute("id", "customlightbox64payment");
+					span.appendChild(document.createTextNode(vets[whichvets][i].payments));
+
+					lightboxdiv.appendChild(span);
+					customlightbox64.appendChild(lightboxdiv);
+
+					lightboxdiv = document.createElement("div");
+					lightboxdiv.setAttribute("id", "customlightbox64reviews");
+					lightboxdiv.setAttribute("class", "clearboth");
+
+					span = document.createElement("span");
+					span.setAttribute("class", "noborder");
+					h = document.createElement("h3");
+					h.appendChild(document.createTextNode("Reviews:"));
+
+					span.appendChild(h);
+					lightboxdiv.appendChild(span);
+					lightboxdiv.appendChild(document.createElement("br"));
+
+					reviewindex64 = 0
+					//Reviews up arrow.
+					span = document.createElement("span");
+					span.appendChild(document.createTextNode("\u25B2"));
+					span.setAttribute("class", "noborder lightbox64reviewarrow");
+					span.setAttribute("id", "lightbox64reviewarrowup");
+
+					span.onclick = buildUpArrow(i, whichvets);
+
+					lightboxdiv.appendChild(span);
+
+					span = document.createElement("span");
+
+					//Go to an inner container, so we can put a scrollbar outside of the review.
+					span.setAttribute("id", "lightbox64reviewbox");
+					span.setAttribute("class", "noborder");
+					span.appendChild(document.createElement("span"));
+					span = span.children[0];
+					span.setAttribute("id", "lightbox64innerreviewbox");
+
+					span2 = document.createElement("span");
+					span2.setAttribute("class", "noborder");
+
+					h = document.createElement("h4");
+					h.appendChild(document.createTextNode(vets[whichvets][i].review[0].name));
+
+					span2.appendChild(h);
+					span.appendChild(span2);
+
+					span2 = document.createElement("span");
+					span2.setAttribute("class", "noborder");
+
+					h = document.createElement("h4");
+					h.appendChild(document.createTextNode(vets[whichvets][i].review[0].date));
+
+					span2.appendChild(h);
+					span.appendChild(span2);
+
+					span2 = document.createElement("span");
+					span2.setAttribute("class", "noborder");
+					span2.setAttribute("id", "reviewofreviews64");
+
+					h = document.createElement("h4");
+					h.appendChild(document.createTextNode((reviewindex64 + 1) + "/" + vets[whichvets][i].review.length + " reviews."));
+
+					span2.appendChild(h);
+					span.appendChild(span2);
+
+					span.appendChild(document.createElement("hr"));
+
+					span2 = document.createElement("span");
+					span2.setAttribute("class", "noborder");
+					span2.appendChild(document.createTextNode(vets[whichvets][i].review[0].text));
+
+					span.appendChild(span2);
+
+					innerreviewbox64 = span;
+					span = span.parentElement; //Return to the outer container so we can append it like normal.
+					lightboxdiv.appendChild(span);
+
+					//Reviews down arrow.
+					span = document.createElement("span");
+					span.appendChild(document.createTextNode("\u25BC"));
+					span.setAttribute("class", "noborder lightbox64reviewarrow");
+					span.setAttribute("id", "lightbox64reviewarrowdown");
+
+					span.onclick = buildDownArrow(i, whichvets);
+
+					lightboxdiv.appendChild(span);
+
+					customlightbox64.appendChild(lightboxdiv);
+
+					//Activate and track the lightbox system.
+					customlightbox64whole = customlightbox64bg;
+					myForm.appendChild(customlightbox64whole);
+
+					if(!availablenow)
+					{
+						choosedate64 = document.createElement("div");
+						choosedate64.setAttribute("id", "choosedate64");
+
+						span = document.createElement("span");
+						h = document.createElement("h3");
+						h.appendChild(document.createTextNode("Book an Appointment:"));
+						span.appendChild(h);
+						
+						span2 = document.createElement("span");
+						bookbutton64 = document.createElement("input");
+						bookbutton64.setAttribute("id", "popupsubmit");
+						bookbutton64.setAttribute("class", "form_btn");
+						bookbutton64.setAttribute("type", "button");
+						bookbutton64.setAttribute("value", "Book");
+						bookbutton64.disabled = true;
+						bookbutton64.onclick = function()
+						{
+							var tempspanhidden = document.createElement("span");
+							var temphidden =
+								verboseweekday2[dates[lastselecteddateobject].weekday]
+								+ ". " + verbosemonth[document.getElementById("hiddeninputs").children[0].value]
+								+ " " +  document.getElementById("hiddeninputs").children[1].value
+								+ ", ";
+
+							//If we have looped around to the next year.
+							if(dates[lastselecteddateobject].month < dates[0].month
+								|| (dates[lastselecteddateobject].month == dates[0].month && dates[lastselecteddateobject].month < dates[0].month))
+							{
+								temphidden = temphidden + (jsdate.getFullYear() + 1);
+							}
+							else
+							{
+								temphidden = temphidden + jsdate.getFullYear();
+							}
+
+							temphidden = temphidden + " at " + document.getElementById("hiddeninputs").children[2].value;
+							if(document.getElementById("hiddeninputs").children[3].value != "0")
+							{
+								temphidden = temphidden + ":" + document.getElementById("hiddeninputs").children[3].value;
+							}
+							temphidden = temphidden + document.getElementById("hiddeninputs").children[4].value;
+
+							tempspanhidden.appendChild(document.createTextNode(temphidden));
+							document.getElementById("hiddeninputs").appendChild(tempspanhidden);
+
+							document.getElementById("customlightbox64x").onclick();
+							formsubmit.disabled = false;
+						};
+						span2.appendChild(bookbutton64);
+
+						monthslist64 = document.createElement("div");
+						monthslist64.setAttribute("id", "monthslist64");
+
+						dateslist64 = document.createElement("div");
+						dateslist64.setAttribute("id", "dateslist64");
+
+						timelist64 = document.createElement("div");
+						timelist64.setAttribute("id", "timelist64");
+
+						choosedate64.appendChild(span);
+						choosedate64.appendChild(span2);
+						choosedate64.appendChild(monthslist64);
+						choosedate64.appendChild(dateslist64);
+						choosedate64.appendChild(timelist64);
+
+						customlightbox64whole.appendChild(choosedate64);
+
+						buildmonthslist(true);
+
+						setChoice3("schedulepopup");
+						displayCurrentMonthDates();
+						monthspan.innerText = verbosemonth[availablemonths[chosenmonth]];
+					}
+				}
+
+				function buildUpArrow(i, whichvets)
+				{
+					return function()
+					{
+						if(reviewindex64 != 0 && !interval64)
+						{
+							position64 = 0;
+							position64offset = 0;
+							interval64 = setInterval(
+								function()
+								{
+									innerreviewbox64.parentElement.setAttribute("class", "noborder noscroll");
+									position64++;
+									if(position64 == 97)
+									{
+										position64offset = -192;
+										reviewindex64--;
+
+										//console.log(vets[whichvets][i].review[reviewindex64]);
+										innerreviewbox64.children[0].children[0].innerText = vets[whichvets][i].review[reviewindex64].name;
+										innerreviewbox64.children[1].children[0].innerText = vets[whichvets][i].review[reviewindex64].date;
+										innerreviewbox64.children[2].children[0].innerText = (reviewindex64 + 1) + "/" + vets[whichvets][i].review.length + " reviews.";
+										innerreviewbox64.children[4].innerText = vets[whichvets][i].review[reviewindex64].text;
+									}
+									else if(position64 == 193)
+									{
+										innerreviewbox64.parentElement.setAttribute("class", "noborder");
+										clearInterval(interval64);
+										interval64 = false;
+										return;
+									}
+									innerreviewbox64.style.marginTop = (position64 + position64offset) + "px";
+								},
+							1);
+						}
+					};
+				}
+				function buildDownArrow(i, whichvets)
+				{
+					return function()
+					{
+						if(reviewindex64 != vets[whichvets][i].review.length - 1 && !interval64)
+						{
+							position64 = 0;
+							position64offset = 0;
+							interval64 = setInterval(
+								function()
+								{
+									innerreviewbox64.parentElement.setAttribute("class", "noborder noscroll");
+									position64--;
+									if(position64 == -97)
+									{
+										position64offset = 192;
+										reviewindex64++;
+
+										//console.log(vets[whichvets][i].review[reviewindex64]);
+										innerreviewbox64.children[0].children[0].innerText = vets[whichvets][i].review[reviewindex64].name;
+										innerreviewbox64.children[1].children[0].innerText = vets[whichvets][i].review[reviewindex64].date;
+										innerreviewbox64.children[2].children[0].innerText = (reviewindex64 + 1) + "/" + vets[whichvets][i].review.length + " reviews.";
+										innerreviewbox64.children[4].innerText = vets[whichvets][i].review[reviewindex64].text;
+									}
+									else if(position64 == -193)
+									{
+										innerreviewbox64.parentElement.setAttribute("class", "noborder");
+										clearInterval(interval64);
+										interval64 = false;
+										return;
+									}
+									innerreviewbox64.style.marginTop = (position64 + position64offset) + "px";
+								},
+							1);
+						}
+					};
+				}
+				
+				var myForm = document.getElementById("myForm");
+
+				var choice2 = document.getElementById("choice2");
+				var choice2cached = document.createElement("span");
+				choice2cached.setAttribute("class", "formright");
+
+				var talkfirstvet = document.getElementById("talkfirstvet");
+				var choosevetnow = document.getElementById("choosevetnow");
+				var choosevetlater = document.getElementById("choosevetlater");
+				var choosedate = document.getElementById("choosedate");
+
+				var formvetsnow = document.getElementById("formvetsnow");
+				var formvetslater = document.getElementById("formvetslater");
+
+				var monthslist = document.getElementById("monthslist");
+				var monthsindex;
+				var dateslist = document.getElementById("dateslist");
+				var timelist = document.getElementById("timelist");
+
+				var formsubmit = document.getElementById("formsubmit");
+
+				//This is where our retrieved data from the server will go.
+				var vets = {now: [], later: []};
+				var dates = [];
+				
+				//This div is where our hidden form inputs will go.
+				var hiddeninputs = document.getElementById("hiddeninputs");
+
+				//These are the possible hidden input configurations we can have.
+				var hiddenchoice = {
+					vet: document.createElement("input"),
+					scheduledate: [document.createElement("input"), document.createElement("input"), document.createElement("input"), document.createElement("input"), document.createElement("input")]
+				};
+				hiddenchoice.vet.type = "hidden";
+				hiddenchoice.vet.name = "vetid";
+				hiddenchoice.scheduledate[0].type = "hidden";
+				hiddenchoice.scheduledate[0].name = "app[month]";
+				hiddenchoice.scheduledate[1].type = "hidden";
+				hiddenchoice.scheduledate[1].name = "app[date]";
+				hiddenchoice.scheduledate[2].type = "hidden";
+				hiddenchoice.scheduledate[2].name = "app[hour]";
+				hiddenchoice.scheduledate[3].type = "hidden";
+				hiddenchoice.scheduledate[3].name = "app[minutes]";
+				hiddenchoice.scheduledate[4].type = "hidden";
+				hiddenchoice.scheduledate[4].name = "app[ampm]";
+				
+				//Track which custom selection we're on from where we were.
+				var selected = {vet: false, date: false, time: false, lastchoice: ""};
+
+				//So we can use the selected date when we choose one from the lightbox.
+				var lastselecteddateobject;
+
+				//So we can track the later vets visible presentation of data. (The presentation of what date/time we chose.)
+				var laterspanhidden = false;
+
+				//Get javascript Date stuff so we know how many days in the month, etc.
+				var jsdate = new Date();
+				var month = jsdate.getMonth();
+				var jsdate2 = new Date(jsdate.getFullYear(), month + 1, 0); //Incrementing month and zero day gets the last day of this month.
+				var verbosemonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+				var verboseweekday = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];	//For selecting a date.
+				var verboseweekday2 = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];	//For presenting the final selection.
+				var daysthismonth = jsdate2.getDate();
+				var numberdate = jsdate.getDate();
+				var numberdaysleftthismonth = daysthismonth - numberdate;
+				var weekday = jsdate.getDay();
+
+				//Get how many days from now until the 6 month anniversary of today.
+				var jsdate6 = new Date();
+				jsdate6.setMonth(month + 6, numberdate);
+				var sixmonths = Math.round((jsdate6 - jsdate) / (1000 * 60 * 60 * 24)) + 1;
+				
+				var chosenmonth = month;
+				var availablemonths = [];
+				for(i = 0; i < 7; i++)
+				{
+					availablemonths.push(month + i);
+					if (availablemonths[i] > 11)
+					{
+						availablemonths[i] -= 12;
+					}
+				}
+				//Wrong month will display unless availablemonths has the whole year's months starting from January.
+				var firstavailablemonth = availablemonths[0];
+				for(i = availablemonths[0] - 1; i >= 0; i--)
+				{
+					availablemonths.unshift(i);
+				}
+
+				//Init vets and dates with data.
+				//For now, this will be example data. When we're ready, we'll use real data.
+				vets.now =
+				[
+					{name: 'Dr. Vet1', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet1.webp'},
+					{name: 'Dr. Vet2', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet2.webp'},
+					{name: 'Dr. Tenney', sub: 'Licensed Veterinarian', desc: 'I\'ve been practicing 30+ years. I know my way around any animal.', img: 'vet3.webp'},
+					{name: 'Dr. Vet4', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet4.webp'},
+					{name: 'Dr. Vet5', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet5.webp'},
+					{name: 'Dr. Vet6', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet6.webp'},
+					{name: 'Dr. Vet7', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet6.webp'}
+				];
+				vets.later =
+				[
+					{name: 'Dr. Vet6', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet6.webp'},
+					{name: 'Dr. Vet7', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet6.webp'},
+					{name: 'Dr. Vet5', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet5.webp'},
+					{name: 'Dr. Vet4', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet4.webp'},
+					{name: 'Dr. Tenney', sub: 'Licensed Veterinarian', desc: 'I\'ve been practicing 30+ years. I know my way around any animal.', img: 'vet3.webp'},
+					{name: 'Dr. Vet2', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet2.webp'},
+					{name: 'Dr. Vet1', sub: 'Licensed Veterinarian', desc: 'About me.', img: 'vet1.webp'}
+				];
+				//Create fake IDs for the examples.
+				for(let i = 0; i < vets.now.length; i++)
+				{
+					vets.now[i].id = "00" + (i + 1);
+					vets.now[i].sub = vets.now[i].sub + (i + 1);
+					vets.now[i].city = "City" + (i + 1);
+					vets.now[i].state = "ST";
+					vets.now[i].price = (i + 1) * 10;
+					vets.now[i].contacts = "Zoom or Facetime" + (i + 1);
+					vets.now[i].payments = "Zello or Venmo" + (i + 1);
+					vets.now[i].review =
+					[
+						{name: "Janet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/22" , text: vets.now[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview1!"},
+						{name: "Banet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/33" , text: vets.now[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview2!"},
+						{name: "Danet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/44" , text: vets.now[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview3!"},
+						{name: "Manet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/55" , text: vets.now[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview4!"}
+					];
+				}
+				for(let i = 0; i < vets.later.length; i++)
+				{
+					vets.later[i].id = "00" + (i + 1);
+					vets.later[i].sub = vets.later[i].sub + (i + 1);
+					vets.later[i].city = "City" + (i + 1);
+					vets.later[i].state = "ST";
+					vets.later[i].price = (i + 1) * 10;
+					vets.later[i].contacts = "Zoom or Facetime" + (i + 1);
+					vets.later[i].payments = "Zello or Venmo" + (i + 1);
+					vets.later[i].review =
+					[
+						{name: "Janet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/22" , text: vets.later[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview1"},
+						{name: "Banet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/33" , text: vets.later[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview2"},
+						{name: "Danet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/44" , text: vets.later[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview3"},
+						{name: "Manet " + (i + 1) + ".", date: (month + 1) + "/" + (i + 1) + "/55" , text: vets.later[i].name + " was extremely helpful in their advice to make sure Fluffy had everything she needed to heal from surgery. ExampleReview4"}
+					];
+				}
+
+				//Get all the days from now until the 6 month anniversary of today.
+				initMonth(sixmonths);
+				function initMonth(days)
+				{
+					let dayssubtracted = 0;
+					for (let i = 0; i < days; i++)
+					{
+						//Pick random hours throughout the day for our example. Each of these has a 50/50 chance to add one hour to it.
+						dates.push({month: month, date: numberdate + i - dayssubtracted, weekday: weekday + i, hours:
+						[
+							7,
+							8 + Math.round(Math.random()),
+							10 + Math.round(Math.random()),
+							12 + Math.round(Math.random()),
+							14 + Math.round(Math.random()),
+							16 + Math.round(Math.random()),
+							18 + Math.round(Math.random())
+						], minutes: [], ampm: [], index: i
+						});
+
+						//Determine if each hour is am or pm. Then if it's 13 or higher, reduce it.
+						//Add a random 15 minute increment.
+						let tempminutes;
+						for (let h = 0; h < dates[i].hours.length; h++)
+						{
+							if(dates[i].hours[h] >= 12)
+							{
+								dates[i].ampm.push("pm");
+							}
+							else
+							{
+								dates[i].ampm.push("am");
+							}
+
+							if(dates[i].hours[h] >= 13)
+							{
+								dates[i].hours[h] -= 12;
+							}
+
+							tempminutes = Math.random();
+							if(tempminutes < 0.25)
+							{
+								dates[i].minutes.push(15);
+							}
+							else if(tempminutes < 0.5)
+							{
+								dates[i].minutes.push(30);
+							}
+							else if(tempminutes < 0.75)
+							{
+								dates[i].minutes.push(45);
+							}
+							else
+							{
+								dates[i].minutes.push(0);
+							}
+						}
+
+						//Correct the month if we've gone beyond this month.
+						if(dates[i].date > daysthismonth)
+						{
+							dates[i].month += 1;
+							jsdate.setDate(dates[i].date);
+							month = jsdate.getMonth();
+							jsdate2.setMonth(month + 1, 0);
+							dates[i].date -= daysthismonth;
+							dayssubtracted += daysthismonth;
+							//console.log(jsdate.getMonth() + " " + jsdate.getDate());
+							daysthismonth = jsdate2.getDate();
+						}
+						if(dates[i].month == 12)
+						{
+							dates[i].month = 0;
+						}
+
+						while(dates[i].weekday > 6)
+						{
+							dates[i].weekday -= 7;
+						}
+					}
+				}
+
+				var tempspan, tempdiv1, tempdiv2, miscspan, monthspan, misch3, misch4_1, /*misch4_2,*/ bannerdiv, bannerdivp, temph3, temph4, tempp, tempimg;
+
+				//Build our doctors and dates.
+				for (let i = 0; i < vets.now.length; i++)
+				{
+					tempspan = document.createElement("span");
+					bannerdiv = document.createElement("div");
+					bannerdivp = document.createElement("p");
+					tempdiv1 = document.createElement("div");
+					tempdiv2 = document.createElement("div");
+					miscspan = document.createElement("div");
+					temph3 = document.createElement("h3");
+					misch3 = document.createElement("h3");
+					misch4_1 = document.createElement("h4");
+					//misch4_2 = document.createElement("h4");
+					temph4 = document.createElement("h4");
+					tempp = document.createElement("p");
+					tempimg = document.createElement("img");
+
+					temph3.appendChild(document.createTextNode(vets.now[i].name));
+					temph4.appendChild(document.createTextNode(vets.now[i].sub));
+					tempp.appendChild(document.createTextNode(vets.now[i].desc));
+					tempimg.src = vets.now[i].img;
+					tempimg.setAttribute("class", "doctoravatar");
+
+					bannerdivp.appendChild(document.createTextNode("Available Now"));
+					bannerdiv.appendChild(bannerdivp);
+					bannerdiv.setAttribute("class", "availablenow");
+					tempdiv1.appendChild(temph3);
+					tempdiv1.appendChild(temph4);
+					tempdiv1.appendChild(tempp);
+					tempdiv2.appendChild(tempimg);
+					misch3.appendChild(document.createTextNode("Learn More"));
+					misch4_1.appendChild(document.createTextNode("10 Reviews"));
+					//misch4_2.appendChild(document.createTextNode("4.5/5 avg. Ratings."));
+
+					misch3.onclick = createLightbox(i, true);
+					misch4_1.onclick = createLightbox(i, true);
+
+					tempdiv1.appendChild(misch3);
+					miscspan.appendChild(misch4_1);
+					//miscspan.appendChild(misch4_2);
+					miscspan.setAttribute("class", "vetmiscellaneous");
+					misch3.setAttribute("class", "learnmore");
+
+					tempdiv2.appendChild(miscspan);
+
+					tempspan.appendChild(bannerdiv);
+					tempspan.appendChild(tempdiv1);
+					tempspan.appendChild(tempdiv2);
+
+					tempspan.onclick = createVetNow(i);
+
+					formvetsnow.appendChild(tempspan);
+				}
+				for (let i = 0; i < vets.later.length; i++)
+				{
+					tempspan = document.createElement("span");
+					tempdiv1 = document.createElement("div");
+					tempdiv2 = document.createElement("div");
+					miscspan = document.createElement("div");
+					temph3 = document.createElement("h3");
+					misch3 = document.createElement("h3");
+					misch4_1 = document.createElement("h4");
+					//misch4_2 = document.createElement("h4");
+					temph4 = document.createElement("h4");
+					tempp = document.createElement("p");
+					tempimg = document.createElement("img");
+
+					temph3.appendChild(document.createTextNode(vets.later[i].name));
+					temph4.appendChild(document.createTextNode(vets.later[i].sub));
+					tempp.appendChild(document.createTextNode(vets.later[i].desc));
+					tempimg.src = vets.later[i].img;
+					tempimg.setAttribute("class", "doctoravatar");
+
+					tempdiv1.appendChild(temph3);
+					tempdiv1.appendChild(temph4);
+					tempdiv1.appendChild(tempp);
+					tempdiv2.appendChild(tempimg);
+					misch3.appendChild(document.createTextNode("Learn More"));
+					misch4_1.appendChild(document.createTextNode("10 Reviews"));
+					//misch4_2.appendChild(document.createTextNode("4.5/5 avg. Ratings."));
+
+					//These aren't needed if merely selecting a Later vet will create the lightbox.
+					//misch3.onclick = createLightbox(i, false);
+					//misch4_1.onclick = createLightbox(i, false);
+
+					tempdiv1.appendChild(misch3);
+					miscspan.appendChild(misch4_1);
+					//miscspan.appendChild(misch4_2);
+					miscspan.setAttribute("class", "vetmiscellaneous");
+					misch3.setAttribute("class", "learnmore");
+
+					tempdiv2.appendChild(miscspan);
+
+					tempspan.appendChild(tempdiv1);
+					tempspan.appendChild(tempdiv2);
+
+					tempspan.onclick = createVetLater(i);
+
+					formvetslater.appendChild(tempspan);
+				}
+				buildmonthslist();
+				function buildmonthslist(popup)
+				{
+					if(popup)	//Only using this for "Schedule for later" vets.
+					{
+						var monthslist = monthslist64;
+						var dateslist =  dateslist64;
+						var timelist = timelist64;
+					}
+					else			//This "else" is needed due to hoisting. Without it, these variables become locally scoped "undefined" even if popup is false.
+					{
+						var monthslist = window.monthslist;
+						var dateslist = window.dateslist;
+						var timelist = window.timelist;
+					}
+
+					monthspan = document.createElement("span");
+					monthspan.appendChild(document.createTextNode("<"));
+					monthspan.setAttribute("class", "montharrow");
+					monthspan.onclick = function ()
+					{
+						if (chosenmonth == firstavailablemonth)
+						{
+							return;
+						}
+						chosenmonth--;
+						//console.log(chosenmonth);
+						if(customlightbox64whole)
+						{
+							setChoice3("schedulepopup");
+						}
+						else
+						{
+							setChoice3("scheduledate");
+						}
+						displayCurrentMonthDates();
+						monthspan.innerText = verbosemonth[availablemonths[chosenmonth]];
+					}
+					monthslist.appendChild(monthspan);
+					monthspan = document.createElement("span");
+					monthspan.appendChild(document.createTextNode(">"));
+					monthspan.setAttribute("class", "montharrow");
+					monthspan.onclick = function ()
+					{
+						if (chosenmonth == availablemonths[availablemonths.length - 1] || chosenmonth - 12 == availablemonths[availablemonths.length - 1])
+						{
+							return;
+						}
+					
+						chosenmonth++;
+						//console.log(chosenmonth);
+						if(customlightbox64whole)
+						{
+							setChoice3("schedulepopup");
+						}
+						else
+						{
+							setChoice3("scheduledate");
+						}
+						displayCurrentMonthDates();
+						monthspan.innerText = verbosemonth[availablemonths[chosenmonth]];
+					}
+					monthslist.appendChild(monthspan);
+					monthspan = document.createElement("span");
+					monthspan.appendChild(document.createTextNode(verbosemonth[availablemonths[chosenmonth]]));
+					monthslist.insertBefore(monthspan, monthslist.lastChild);
+				}
+
+				displayCurrentMonthDates();
+				function displayCurrentMonthDates()
+				{
+					if(customlightbox64whole)
+					{
+						var dateslist = dateslist64;
+					}
+					else			//This "else" is needed due to hoisting. Without it, this variable becomes locally scoped "undefined" even if customlightbox64whole is false.
+					{
+						var dateslist = window.dateslist;
+					}
+
+					while (dateslist.firstChild)
+					{
+						dateslist.removeChild(dateslist.lastChild);
+					}
+
+					let dayCount = 0;
+					for (let i = 0; i < dates.length; i++)
+					{
+						if(dates[i].month == chosenmonth || dates[i].month == chosenmonth - 12)
+						{
+							tempspan = document.createElement("span");
+							tempspan.appendChild(document.createTextNode(verboseweekday[dates[i].weekday]));
+							tempspan.appendChild(document.createElement("br"));
+							tempspan.appendChild(document.createTextNode(dates[i].date));
+
+							tempspan.onclick = createDates(dayCount, i);
+							dayCount++;
+
+							dateslist.appendChild(tempspan);
+						}
+					}
+				}
+
+				//IE breaks building our dates, because using a variable to pass a parameter in a loop makes all created functions take the same variable after-the-fact.
+				//In practice, this means that for every "displayTimes(i)", i is whatever it last was. Meaning that every onclick in IE will do "displayTimes(total_loops + 1)".
+				//Therefore we must create our onclick anonymous functions independently of the loop, to work with IE.
+				function createDates(i, j)
+				{
+					return function()
+					{
+						highlightChoice3(i, "date");
+						setHidden(j, "date");
+						displayTimes(j);
+					};
+				}
+				function createTimes(i, j)
+				{
+					return function()
+					{
+						highlightChoice3(i, "time");
+						setHidden(i, "time", j);
+					};
+				}
+				function createVetNow(i)
+				{
+					//highlightChoice3 must go before setHidden here, because it sets selected.vet.
+					return function()
+					{
+						highlightChoice3(i, "vetnow");
+						setHidden(i, "vetnow");
+					};
+				}
+				function createVetLater(i)
+				{
+					//highlightChoice3 must go before setHidden here, because it sets selected.vet.
+					return function()
+					{
+						highlightChoice3(i, "vetlater");
+						setHidden(i, "vetlater");
+						buildcustomlightbox64(i, false);	//Date and time must be selected for a Later vet.
+					};
+				}
+				function createLightbox(i, bool)
+				{
+					return function()
+					{
+						buildcustomlightbox64(i, bool);
+					};
+				}
+
+				//Set up our dates to display our times.
+				function displayTimes(n)
+				{
+					if(customlightbox64whole)
+					{
+						var timelist = timelist64;
+					}
+					else			//This "else" is needed due to hoisting. Without it, this variable becomes locally scoped "undefined" even if customlightbox64whole is false.
+					{
+						var timelist = window.timelist;
+					}
+
+					let tempminutes;
+					console.log("dates[" + n + "]");
+					//console.log(timelist);
+					lastselecteddateobject = n;
+					while (timelist.firstChild)
+					{
+						timelist.removeChild(timelist.lastChild);
+					}
+
+					for (let i = 0; i < dates[n].hours.length; i++)
+					{
+						tempspan = document.createElement("span");
+						tempspan.appendChild(document.createElement("br"));
+						tempspan.appendChild(document.createElement("br"));
+
+						if(!dates[n].minutes[i])
+						{
+							tempminutes = "00";
+						}
+						else
+						{
+							tempminutes = dates[n].minutes[i];
+						}
+
+						tempspan.appendChild(document.createTextNode(dates[n].hours[i] + ":" + tempminutes + dates[n].ampm[i]));
+
+						tempspan.onclick = createTimes(i, n);
+
+						timelist.appendChild(tempspan);
+					}
+				}
+
+				//Init form second choices. We'll be placing the relevant one based on the first choice.
+				var asap = [];
+				var schedlater = [];
+
+				for(let i = 0; i < 5; i++) //This could've been way easier, but I didn't want to duplicate code.
+				{
+					switch(i)
+					{
+						case 0:
+						case 3:
+							asap[i] = document.createElement("input");
+							schedlater[i] = document.createElement("input");
+
+							asap[i].setAttribute("type", "radio");
+							asap[i].setAttribute("name", "customvet");
+							schedlater[i].setAttribute("type", "radio");
+							schedlater[i].setAttribute("name", "latervet");
+
+							if(i == 0)
+							{
+								asap[i].setAttribute("value", "asap");
+								asap[i].checked = true;
+								schedlater[i].setAttribute("value", "daytime");
+
+								asap[i].onchange = function()
+								{
+									setChoice3("asapfirst");
+								}
+								schedlater[i].onchange = function()
+								{
+									setChoice3("scheduledate");
+								}
+							}
+							else
+							{
+								asap[i].setAttribute("value", "choosevet");
+								schedlater[i].setAttribute("value", "choosevet");
+
+								asap[i].onchange = function()
+								{
+									setChoice3("asapvets");
+								}
+								schedlater[i].onchange = function()
+								{
+									setChoice3("schedulevets");
+								}
+							}
+						break;
+						case 1:
+						case 4:
+							asap[i] = document.createElement("label");
+							schedlater[i] = document.createElement("label");
+
+							if(i == 1)
+							{
+								asap[i].appendChild(document.createTextNode("Talk to first available."));
+								schedlater[i].appendChild(document.createTextNode("Request appointment time."));
+							}
+							else
+							{
+								asap[i].appendChild(document.createTextNode("Select a veterinarian to contact you."));
+								schedlater[i].appendChild(document.createTextNode("Select a vet and book an appointment."));
+							}
+						break;
+						default:
+							asap[i] = document.createElement("br");
+							schedlater[i] = document.createElement("br");
+					}
+				}
+
+				//Initialize the cache span by appending our array of elements into it.
+				for(let i = 0; i < 5; i++)
+				{
+					choice2cached.appendChild(asap[i]);
+				}
+
+				//Swap the sets of second choices when the first choice is changed.
+				//The first time this runs, it will initialize the second set of choices by appending them into the span cache after the replace is done.
+				//Once the second set is initialized, this function will redefine itself to simply swap them.
+				function setChoice2()
+				{
+					//Put the ID on the cached one so we aren't doing potentially invalid stuff in the DOM.
+					choice2.removeAttribute("id");
+					choice2cached.setAttribute("id", "choice2");
+
+					//Put the cache into place. We don't need to save it on the first run.
+					myForm.replaceChild(choice2cached, choice2)
+					choice2 = document.getElementById("choice2");
+
+					//Initialize the cache with the second set of choices now.
+					choice2cached = document.createElement("span");
+					choice2cached.setAttribute("class", "formright");
+					for(let i = 0; i < 5; i++)
+					{
+						choice2cached.appendChild(schedlater[i]);
+					}
+
+					//Redefine this function.
+					setChoice2 = function()
+					{
+						//Put the ID on the cached one so we aren't doing potentially invalid stuff in the DOM.
+						choice2.removeAttribute("id");
+						choice2cached.setAttribute("id", "choice2");
+
+						//Swap the cache with the existing choices2 set.
+						choice2cached = myForm.replaceChild(choice2cached, choice2)
+						choice2 = document.getElementById("choice2");
+
+						//Execute the correct choice2 onset to update which section is visible.
+						var temp = choice2.getElementsByTagName("input")
+						var flag = false;
+						for(let i = 0; i < temp.length; i++)
+						{
+							if(temp[i].checked)
+							{
+								flag = true;
+								temp[i].onchange();
+								break;
+							}
+							else
+							{
+								choosevetnow.setAttribute("class", "formhidden");
+							}
+						}
+						if(!flag)
+						{
+							talkfirstvet.setAttribute("class", "formhidden");
+							formsubmit.disabled = true;
+						}
+						else if(choice2.getElementsByTagName("input")[0].name == "latervet")
+						{
+							//Redefine this function again since we don't need to check for the flag anymore.
+							console.log("Final Redefine.");
+							setChoice2 = function()
+							{
+								//Put the ID on the cached one so we aren't doing potentially invalid stuff in the DOM.
+								choice2.removeAttribute("id");
+								choice2cached.setAttribute("id", "choice2");
+
+								//Swap the cache with the existing choices2 set.
+								choice2cached = myForm.replaceChild(choice2cached, choice2)
+								choice2 = document.getElementById("choice2");
+
+								//Execute the correct choice2 onset to update which section is visible.
+								var temp = choice2.getElementsByTagName("input")
+								for(let i = 0; i < temp.length; i++)
+								{
+									if(temp[i].checked)
+									{
+										temp[i].onchange();
+										break;
+									}
+								}
+							}
+						}
+					}
+				}
+
+				setChoice2();
+
+				//This controls which section is visible based on what choice2 has gone active.
+				//We can also use this to set up the correct hidden input(s).
+				function setChoice3(str)
+				{
+					console.log(str);
+
+					if(customlightbox64whole)
+					{
+						var timelist = timelist64;
+					}
+					else			//This "else" is needed due to hoisting. Without it, this variable becomes locally scoped "undefined" even if customlightbox64whole is false.
+					{
+						var timelist = window.timelist;
+					}
+
+					//Clear the hidden input(s).
+					while (hiddeninputs.firstChild)
+					{
+						if(!customlightbox64whole)
+						{
+							hiddeninputs.removeChild(hiddeninputs.lastChild);
+						}
+						else
+						{
+							//console.log(customlightbox64whole);
+							for(let i = hiddeninputs.children.length - 1; i >= 0; i--)
+							{
+								if(hiddeninputs.children[i].name != "vetid")
+								{
+									hiddeninputs.removeChild(hiddeninputs.children[i]);
+								}
+							}
+							break;
+						}
+					}
+
+					//Clear our highlight.
+					//This also disables the submit button.
+					highlightChoice3(null, "clear");
+
+					//Clear our last custom selection.
+					switch(selected.lastchoice)
+					{
+						//case "asapvets":
+						//case "schedulevets":
+
+						//break;
+
+						case "scheduledate":
+							//console.log(timelist);
+							while (timelist.firstChild)
+							{
+								timelist.removeChild(timelist.lastChild);
+							}
+						break
+					}
+
+					switch(str)
+					{
+						case "asapfirst":
+							talkfirstvet.setAttribute("class", "");
+							choosevetnow.setAttribute("class", "formhidden");
+							choosevetlater.setAttribute("class", "formhidden");
+							choosedate.setAttribute("class", "formhidden");
+							//Enable the submit button if we're not making any 3rd choices.
+							formsubmit.disabled = false;
+						break;
+
+						case "asapvets":
+							talkfirstvet.setAttribute("class", "formhidden");
+							choosevetnow.setAttribute("class", "");
+							choosevetlater.setAttribute("class", "formhidden");
+							choosedate.setAttribute("class", "formhidden");
+
+							hiddeninputs.appendChild(hiddenchoice.vet.cloneNode());
+						break;
+
+						case "scheduledate":
+							talkfirstvet.setAttribute("class", "formhidden");
+							choosevetnow.setAttribute("class", "formhidden");
+							choosevetlater.setAttribute("class", "formhidden");
+							choosedate.setAttribute("class", "");
+
+						//The popup needs the hidden fields for the dates too, but without changing what form section is visible.
+						case "schedulepopup":
+							hiddeninputs.appendChild(hiddenchoice.scheduledate[0].cloneNode());
+							hiddeninputs.appendChild(hiddenchoice.scheduledate[1].cloneNode());
+							hiddeninputs.appendChild(hiddenchoice.scheduledate[2].cloneNode());
+							hiddeninputs.appendChild(hiddenchoice.scheduledate[3].cloneNode());
+							hiddeninputs.appendChild(hiddenchoice.scheduledate[4].cloneNode());
+
+							//Insert our message about picking a date to view available time slots.
+							var p = document.createElement("p");
+							p.appendChild(document.createTextNode("Select a date to view available time slots."));
+							timelist.appendChild(p);
+						break;
+
+						case "schedulevets":
+							talkfirstvet.setAttribute("class", "formhidden");
+							choosevetnow.setAttribute("class", "formhidden");
+							choosevetlater.setAttribute("class", "");
+							choosedate.setAttribute("class", "formhidden");
+
+							hiddeninputs.appendChild(hiddenchoice.vet.cloneNode());
+						break;
+					}
+
+					if(str == "schedulepopup")
+					{
+						selected.lastchoice = "scheduledate";
+					}
+					else
+					{
+						selected.lastchoice = str;
+					}
+
+					laterspanhidden = false;
+				}
+
+				function highlightChoice3(n, type)
+				{
+					console.log("n: " + n + "\ntype: " + type);
+					switch(type)
+					{
+						case "clear":
+							if(selected.vet && !customlightbox64whole)
+							{
+								selected.vet.setAttribute("class", "");
+								selected.vet = false;
+							}
+							if(selected.date)
+							{
+								selected.date.setAttribute("class", "");
+								selected.date = false;
+							}
+							if(selected.time)
+							{
+								selected.time.setAttribute("class", "");
+								selected.time = false;
+							}
+
+							//If we're clearing the 3rd choice, disable the submit.
+							formsubmit.disabled = true;
+						break;
+
+						case "date":
+							if(customlightbox64whole)
+							{
+								if(selected.date)
+								{
+									selected.date.setAttribute("class", "");
+								}
+
+								selected.date = dateslist64.getElementsByTagName("span")[n];
+								selected.date.setAttribute("class", "selected");
+								bookbutton64.disabled = true;
+							}
+							else
+							{
+								if(selected.date)
+								{
+									selected.date.setAttribute("class", "");
+								}
+
+								selected.date = dateslist.getElementsByTagName("span")[n];
+								selected.date.setAttribute("class", "selected");
+							}
+						break;
+
+						case "time":
+							if(customlightbox64whole)
+							{
+								if(selected.time)
+								{
+									selected.time.setAttribute("class", "");
+								}
+
+								selected.time = timelist64.getElementsByTagName("span")[n];
+								selected.time.setAttribute("class", "selected");
+								bookbutton64.disabled = false;
+							}
+							else
+							{
+								if(selected.time)
+								{
+									selected.time.setAttribute("class", "");
+								}
+
+								selected.time = timelist.getElementsByTagName("span")[n];
+								selected.time.setAttribute("class", "selected");
+							}
+						break;
+
+						case "vetnow":
+							if(selected.vet)
+							{
+								selected.vet.setAttribute("class", "");
+							}
+
+							selected.vet = formvetsnow.getElementsByTagName("span")[n];
+							selected.vet.setAttribute("class", "selected");
+						break;
+
+						case "vetlater":
+							if(selected.vet)
+							{
+								selected.vet.setAttribute("class", "");
+							}
+
+							selected.vet = formvetslater.getElementsByTagName("span")[n];
+							selected.vet.setAttribute("class", "selected");
+						break;
+					}
+				}
+				
+				function setHidden(n, type, m)
+				{
+					if(hiddeninputs.getElementsByTagName("input")[0].name == "vetid" && type == "date")
+					{
+						hiddeninputs.appendChild(hiddeninputs.removeChild(hiddeninputs.getElementsByTagName("input")[0]));
+					}
+					var temp = hiddeninputs.getElementsByTagName("input");
+					switch(type)
+					{
+						case "date":
+							if(!customlightbox64whole && laterspanhidden)
+							{
+								hiddeninputs.removeChild(laterspanhidden);
+								laterspanhidden = false;
+							}
+
+							temp[0].value = dates[n].month;
+							temp[1].value = dates[n].date;
+							temp[2].removeAttribute("value");
+							temp[3].removeAttribute("value");
+							temp[4].removeAttribute("value");
+							formsubmit.disabled = true;
+						break;
+
+						case "time":
+							if(!customlightbox64whole && laterspanhidden)
+							{
+								hiddeninputs.removeChild(laterspanhidden);
+								laterspanhidden = false;
+							}
+
+							temp[2].value = dates[m].hours[n];
+							temp[3].value = dates[m].minutes[n];
+							temp[4].value = dates[m].ampm[n];
+							formsubmit.disabled = false;
+
+							//Presenting the selected data on the later vets.
+							//Hidden element cleanup deletes all child elements, therefore visual presentation gets cleared when our hidden inputs are cleared.
+							if(!customlightbox64whole)
+							{
+								laterspanhidden = document.createElement("span");
+								var temphidden =
+								verboseweekday2[dates[lastselecteddateobject].weekday]
+								+ ". " + verbosemonth[document.getElementById("hiddeninputs").children[0].value]
+								+ " " +  document.getElementById("hiddeninputs").children[1].value
+								+ ", ";
+
+								//If we have looped around to the next year.
+								if(dates[lastselecteddateobject].month < dates[0].month
+									|| (dates[lastselecteddateobject].month == dates[0].month && dates[lastselecteddateobject].month < dates[0].month))
+								{
+									temphidden = temphidden + (jsdate.getFullYear() + 1);
+								}
+								else
+								{
+									temphidden = temphidden + jsdate.getFullYear();
+								}
+
+								temphidden = temphidden + " at " + document.getElementById("hiddeninputs").children[2].value;
+								if(document.getElementById("hiddeninputs").children[3].value != "0")
+								{
+									temphidden = temphidden + ":" + document.getElementById("hiddeninputs").children[3].value;
+								}
+								temphidden = temphidden + document.getElementById("hiddeninputs").children[4].value;
+
+								laterspanhidden.appendChild(document.createTextNode(temphidden));
+								document.getElementById("hiddeninputs").appendChild(laterspanhidden);
+							}
+						break;
+
+						case "vetnow":
+							temp[0].value = vets.now[n].id
+							formsubmit.disabled = false;
+						break;
+
+						case "vetlater":
+							temp[0].value = vets.later[n].id
+							formsubmit.disabled = true;
+						break;
+					}
+				}
+
+			</script>
+		</div>
+
+	</div>
+	</div>
+	<!-- End of page content. -->
+
+  <div id="footer">
+    <table width="100%" border="0" cellpadding="10" cellspacing="0" class="GenLayout" id="TableF">
+      <tr>
+        <td width="40%" valign="top" class="GenLayout"><p>© 1999-2021 VRS | <a href="http://vetrelief.com/fterms.phtml">Terms</a> | <a href="http://vetrelief.com/privacy.phtml">Privacy</a>  | <a href="http://vetrelief.com/contact.phtml"> Contact Us</a></p></td>
+		<td width="20%" valign="middle" class="GenLayout"><div align="center">v3.2.20r5</div></td>
+        <td width="40%" valign="middle" class="GenLayout"><div align="right">
+          <p>Hosting &amp; Programming : <a href="http://www.niftywerks.com" target="_blank">Niftywerks, Inc.</a> &nbsp; &nbsp; &nbsp;</p>
+        </div></td>
+      </tr>
+    </table>
+    <!-- end #footer -->
+  </div>
+  </div>
+<!-- end of #container -->
+</div>
+
+<script type="text/javascript">
+<!--
+var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgDown:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarDownHover.gif", imgRight:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarRightHover.gif"});
+//-->
+        </script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-3941141-1");
+pageTracker._initData();
+pageTracker._trackPageview();
+</script></body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+<script type="text/javascript" src="http://vetrelief.com/tmpl/slick-1.8.1/slick/slick.min.js"></script>
+<script>
+$(document).ready(function() {
+	if ($('.ad-carousel').length > 0) {
+		$('.ad-carousel').slick({
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			autoplay: true,
+			autoplaySpeed: 2000
+		});
+	}
+	$('select[id^="adid-"').on('change', function() {
+		var edit_url = '?page=featuredads&sub=edit&adid=';
+		var adid = $(this).attr('id').split('-');
+	    window.location = '/admin/' + edit_url + adid[1];
+	});
+});
+</script>
+</html>

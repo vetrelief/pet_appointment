@@ -193,7 +193,8 @@ function testXMLAuth() {
 	font-family:"Trebuchet MS", Optima, Helvetica, sans-serif;
 	width: 300px;
 	display: none;
-	background-color: #004455;	// ie8 does not support transparency (or maybe its that XP doesnt)
+	background-color: #004455;	
+	/* // ie8 does not support transparency (or maybe its that XP doesnt) */
 	padding: 10px;
 	border: 2px solid #ddd;
 	float: left;
@@ -216,7 +217,7 @@ function testXMLAuth() {
 }
 
 img.btn_close {
- 	Position the close button  
+ 	/* Position the close button   */
  	float: right;
 	margin: -28px -28px 0 0;
 }
@@ -911,8 +912,8 @@ a.forgot{
 				</span>
 				<br />
 				<span class="formRight" id="choice1">
-					<input type="radio" name="customdate" value="asap" onchange="setChoice2()" checked="checked"><label>As soon as possible.</label><br />
-					<input type="radio" name="customdate" value="later" onchange="setChoice2()"><label>Schedule for later.</label>
+					<input type="radio" name="customdate" value="asap" onchange="setChoice2()" checked="checked" id="as-soon-as-possible"><label for="as-soon-as-possible">As soon as possible.</label><br />
+					<input type="radio" name="customdate" value="later" onchange="setChoice2()" id="schedule-for-later"><label for="schedule-for-later">Schedule for later.</label>
 				</span>
 				<hr />
 				<span class="formright" id="choice2">
@@ -2393,9 +2394,7 @@ a.forgot{
 </div>
 
 <script type="text/javascript">
-<!--
 var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgDown:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarDownHover.gif", imgRight:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarRightHover.gif"});
-//-->
         </script>
 
 <script type="text/javascript">

@@ -768,13 +768,22 @@ a.forgot{
 		.formhidden				{display: none}
 
 		@media (max-width:768px) {
+			body{
+				background-color: transparent;
+			}
 			.GenLayout #mainContent{
 				width: 100% !important;
 				max-width: 100% !important;
 				
 			}
+			#mainContent{
+				min-width: unset !important;
+			}
 			.section3_centerpart{
 				width: 90%;
+			}
+			#myForm label{
+				max-width: 100% !important;
 			}
 			.GenLayout #container{
 				width: 100% !important;

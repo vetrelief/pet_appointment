@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VetRelief - Incentive Jobs</title>
 
 <link href="http://vetrelief.com/tmpl/css/Master.css" rel="stylesheet" type="text/css" />
@@ -148,7 +148,10 @@ function testXMLAuth() {
 
 </script>
 <style>
-
+html{
+	width: 100%;
+	overflow-x: hidden;
+}
 .GenLayout #LoginFormJS  {
 	float: left;
 	font-size: 12px;
@@ -397,12 +400,20 @@ a.forgot{
 	float:right;
 }
 .new-top-header{
-	background-color: red;
 	height: 4rem;
 	background-image: url('doggy_heaven_full.jpeg');
 	background-position: center;
 	background-size: cover;
 	display: block;
+}
+@media screen and (max-width:767px) {
+	
+	.new-top-header{
+		max-width: 100%;
+	}
+	.lookingdivs, #lookingdata{
+		width: 100% !important;
+	}
 }
 
 </style>
@@ -755,6 +766,27 @@ a.forgot{
 		#hiddeninputs span	{padding: 4px}
 
 		.formhidden				{display: none}
+
+		@media (max-width:768px) {
+			.GenLayout #mainContent{
+				width: 100% !important;
+				max-width: 100% !important;
+				
+			}
+			.section3_centerpart{
+				width: 90%;
+			}
+			.GenLayout #container{
+				width: 100% !important;
+				height: unset !important;
+			}
+			#choicecontainer{
+				max-width: 100% !important;
+			}
+			.cartoon{
+				display: none;
+			}
+		}
 	</style>
 	<!--End of Override CSS.-->
 	

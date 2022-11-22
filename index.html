@@ -1,8 +1,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VetRelief - Incentive Jobs</title>
+<!-- Favicons -->
+<link href="assets/img/favicon.png" rel="icon">
+<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
+ <!-- Vendor CSS Files -->
+ <!-- <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet"> -->
+ <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+ 
+ <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+ <link rel="stylesheet" href="../../cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Google Fonts -->
+<!-- <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> -->
+
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@200;300;400;600;700;800&amp;display=swap" rel="stylesheet">
+
+<!-- Template Main CSS File -->
+<link href="assets/css/style-2.css" rel="stylesheet">
 <link href="assets/css/Master.css" rel="stylesheet" type="text/css" />
 
 <link rel="stylesheet" type="text/css" href="assets/css/slick.css" />
@@ -806,22 +824,77 @@ a.forgot{
 	
 	</head>
 
-<body  class="GenLayout">
+<body>
+	<!-- ======= Top Bar ======= -->
+	<div id="topbar" class="d-flex align-items-center fixed-top">
+		<div class="container d-flex justify-content-between">
+		  <div class="contact-info d-flex align-items-center">
+			<h6>Telehealth appnts. available 24/7!</h6>
+		  </div>
+		</div>
+	  </div>
+	
+	   <!-- ======= Header ======= -->
+	   <header id="header" class="fixed-top">
+		<div class="container">
+		  
+		  <div class="mobile-nav-tab align-items-center">
+			  <!-- navbar mobile -->
+			  <a href="index-2.html" class="logo"><img src="assets/img/logo_main.png" alt="" class="img-fluid"></a>
+			  <nav id="navbar" class="navbar order-last order-lg-0">
+				<ul>
+				  
+				  <li><a class="nav-link scrollto" href="#">FAQs</a></li>
+				  <li><a class="nav-link scrollto" href="#">My Account</a></li>
+				  <li><a class="nav-link scrollto" href="#">Add pet</a></li>
+				  <li><a class="nav-link scrollto" href="#">Edit profile</a></li>
+				  <li><a class="nav-link scrollto" href="#">Payment settings</a></li>
+				</ul>
+				<i class="bi bi-list mobile-nav-toggle"></i>   
+			  </nav> 
+				  <li><a class="nav-link scrollto active" href="/Homepage">Home</a></li>
+				  <a href="#" class="signup-btn scrollto"><span class="d-md-inline">Logout</a>
+			  <!-- navbar -->
+		  </div>
+		   
+		  <!-- navbar pc -->
+		  <div class="pc-nav-tab">
+			
+			  <nav id="navbar" class="navbar order-last order-lg-0">
+	
+				<div class="pc-nav">
+				  <ul>
+					<li><a class="nav-link scrollto active" href="/Homepage/">Home</a></li>
+					<li><a class="nav-link scrollto active" href="#">FAQs</a></li>
+					<li><a class="nav-link scrollto" href="#">Payment settings</a></li>
+					<li><a class="nav-link scrollto active" href="#">Add pet</a></li>
+				  </ul>
+				</div>  
+				
+				<div class="logo-img">
+				  <a href="#" class="logo"><img src="assets/img/logo_main.png" alt="" class="img-fluid"></a>
+				</div>  
+				  
+	
+				<div class="pc-nav">
+				  <ul>
+					<li><a class="nav-link scrollto" href="#">Edit profile</a></li>
+					<li><a class="nav-link scrollto active" href="#">My account</a></li>
+				  </ul>
+	
+				  <i class="bi bi-list mobile-nav-toggle"></i> 
+	
+				  <a href="#" class="signup-btn scrollto"><span class="d-md-inline">Logout</a> 
+				</div>  
+	
+			  </nav> 
+				<!-- navbar -->
+			
+		  </div>
+		
+		</div>
+	  </header>
 <div id="container">
-  <!-- <div id="header">
-     <table width="100%" border="0" cellspacing="0" cellpadding="0">
-      <tr align="left">
-        <td>
-        	<img src="http://vetrelief.com/tmpl/images/VR Header2.gif" width="345" height="137">
-        
-        </td>
-        <td width="64%"><img src="http://vetrelief.com/tmpl/image_roto/Quotes.14.gif" alt="" name="rotate" width="648" height="137" align="right" id="rotate" style="background-color: #000000" /></td>
-      </tr>
-    </table>
-   </div> -->
-   <div class="new-top-header">
-
-   </div>
    <!-- end #header -->
 <div id="container">
 <p id="error" class="errorText"> </p>
@@ -859,7 +932,8 @@ a.forgot{
 			opacity: 1;
 		}
 	}
-	</style><div id="login-box" class="login-popup"> <a href="#" class="close"><img src="login/images/close_pop.png" class="btn_close right" title="Close Window" alt="Close" /></a>
+	</style>
+	<div id="login-box" class="login-popup"> <a href="#" class="close"><img src="login/images/close_pop.png" class="btn_close right" title="Close Window" alt="Close" /></a>
 		<div class='login-header-text'>Please Login</div> <br><div class="errorText" id="errorText"></div><br>
 		<form id="login" name="login" method="post" action="https://vetrelief.com/login.phtml" onsubmit="return testXMLAuth1();">
 		<input type="hidden" name="LOGIN_FORM" value="" /><input type="hidden" name="page" value="IncentiveJobs">	  <fieldset class="textbox">
@@ -880,9 +954,9 @@ a.forgot{
 	  </form>
 	</div>
 	<!-- Begin. -->
-	<div id="mainContent">
+	
+	<div id="mainContent" class="pet-parent-form-top">
 	<div class="lookingdivs looking1">
-		<img id="image" src="OFFICIAL VRS VRTL LOGO 111.png" />
 		<!-- <span id="message"> We're going to have the logo centered now. -->
 			<!-- Normally an h1 and an h3 goes here. Leaving this span keeps the image to the left, consistent with other pages. -->
 		<!-- </span> -->
@@ -2368,22 +2442,67 @@ a.forgot{
 	</div>
 	</div>
 	<!-- End of page content. -->
-
-  <div id="footer">
-    <table width="100%" border="0" cellpadding="10" cellspacing="0" class="GenLayout" id="TableF">
-      <tr>
-        <td width="40%" valign="top" class="GenLayout"><p>© 1999-2021 VRS | <a href="http://vetrelief.com/fterms.phtml">Terms</a> | <a href="http://vetrelief.com/privacy.phtml">Privacy</a>  | <a href="http://vetrelief.com/contact.phtml"> Contact Us</a></p></td>
-		<td width="20%" valign="middle" class="GenLayout"><div align="center">v3.2.20r5</div></td>
-        <td width="40%" valign="middle" class="GenLayout"><div align="right">
-          <p>Hosting &amp; Programming : <a href="http://www.niftywerks.com" target="_blank">Niftywerks, Inc.</a> &nbsp; &nbsp; &nbsp;</p>
-        </div></td>
-      </tr>
-    </table>
-    <!-- end #footer -->
-  </div>
   </div>
 <!-- end of #container -->
 </div>
+<!-- ======= Footer ======= -->
+<footer id="footer">
+
+	<div class="footer-top">
+	  <div class="container">
+		<div class="row">
+	
+		  <div class="col-lg-4 col-md-6 footer-contact">
+			<img src="assets/img/logo_main.png" alt="logo White">
+			<p>VetRelief.pet, in association with VetRelief.com. Serving the veterinary industry since 1990</p>
+			<!-- <ul>
+				<li><i class="bi bi-phone"></i><a href="tel:+1 949-899-8387">949-899-VETS</a></li>
+				<li><i class="bi bi-envelope"></i> <a href="mailto:info@vetrelief.com">info@vetrelief.com</a> </li>
+				<li><i class="bi bi-chat-dots"></i> <a href="tel:+90 392 815 89 90">+90 392 815 89 90</a> </li>             
+			</ul> -->
+		  </div>
+	
+		  <div class="col-lg-2 col-md-6 footer-links">
+			<h4>Web Links</h4>
+			<ul>
+			  <li><i class="bx bx-chevron-right"></i> <a href="#">About Us</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="#">Pricing</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="#">Contact Us</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+			  <li><i class="bx bx-chevron-right"></i> <a href="#">What We Treat</a></li>
+			</ul>
+		  </div>
+	
+		  <div class="col-lg-3 col-md-6 contact-info">
+			<h4>Contact Info</h4>
+			<ul>
+			  <li><img src="assets/img/f-location-icon.png" alt="location" class="location"> <p> United States</p></li>
+			  <li><img src="assets/img/f-call-icon.png" alt="location" class="call"> <a href="tel:+1 949-899-VETS">949-899-VETS</a></li>
+			  <li><img src="assets/img/f-email-icon.png" alt="email" class="mail"> <a href="mailto:info@vetrelief.com">info@vetrelief.com</a></li>          
+			</ul>
+		  </div>
+	
+		  <div class="col-lg-3 col-md-6 contact-info">
+			<h4>Follow Us</h4>
+			<ul>
+			  <li><img src="assets/img/insta.png" alt="location" class="location"> <p> Instagram</p></li>
+			<li><img src="assets/img/fb.png" alt="location" class="call"> <p> Facebook</p></li>         
+			</ul>
+		  </div>
+	
+		</div>
+	  </div>
+	</div>
+	
+	<div class="copyright d-md-flex justify-content-center py-2">  
+		<div class="copyright-text">
+		   © 2022 VET RELIEF. - All Rights Reserved
+		</div>
+	</div>
+	</footer><!-- End Footer -->
+	<script src="assets/js/custom.js" crossorigin="anonymous"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
 var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgDown:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarDownHover.gif", imgRight:"http://vetrelief.com/tmpl/SpryAssets/SpryMenuBarRightHover.gif"});

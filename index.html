@@ -806,6 +806,7 @@ a.forgot{
 				width: 90%;
 			}
 			#myForm label{
+				width: unset;
 				max-width: 100% !important;
 			}
 			.GenLayout #container{
@@ -818,7 +819,94 @@ a.forgot{
 			.cartoon{
 				display: none;
 			}
+
+			/* New CSS */
+			#myForm .formright{
+				text-align: left;
+			}
+			#myForm span{
+				width: 100%;
+			}
+			#monthslist .montharrow{
+				font-size: 1rem;
+			}
+			#chooseVetnow .formvets span, #chooseVetlater .formvets span{
+				height: 200px;
+				width: 200px;
+			}
+			#formvetslater .formvets,#chooseVetnow .formvets{
+				display: flex;
+				flex-wrap: wrap;
+			}
+			#formvetslater .formvets span,#chooseVetnow .formvets span{
+				width: calc(50% - 4px);
+				padding-top: 1rem;
+			}
+			#chooseVetnow .formvets span div {
+				height: 80px;
+			}
+			#chooseVetnow .formvets span div img, #chooseVetlater .formvets span div img{
+				width: 50px;
+				height: 50px;
+			}
+			#chooseVetnow .formvets .availablenow, #customlightbox64 .availablenow {
+				width: 100%;
+				margin-top: -16px;
+				margin-left: 0;
+				margin-bottom: 8px;
+			}
 		}
+		#myForm input{
+			margin-right: 10px;
+			margin-top: 5px;
+		}
+		#myForm{
+			padding: 20px;
+		}
+		#monthslist{
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+		#dateslist,#timelist{
+			display: flex;
+			gap: 0.5rem;
+			flex-wrap: wrap;
+		}
+		#dateslist span{
+			width: 80px;
+			padding: 5px;
+		}
+		#timelist span{
+			width: 80px;
+			height: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 5px;
+		}
+		#dateslist span.selected,#timelist span.selected,#choicecontainer{
+			background-color: #fff;
+		}
+		#chooseVetnow .formvets span.selected, #chooseVetlater .formvets span.selected{
+			background-color: deepskyblue;
+		}
+		#choicecontainer, #chooseVetnow .formvets, #chooseVetlater .formvets {
+			width: 100%;
+			max-height: 90vh;
+			overflow-y: scroll;
+			overflow: auto;
+		}
+		#customlightbox64{
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			margin-top: unset;
+    		margin-left: unset;
+			max-width: 100%;
+		}
+		
+		
 	</style>
 	<!--End of Override CSS.-->
 	
@@ -974,7 +1062,7 @@ a.forgot{
 			<img src="" class="cartoon" />
 			<form method="POST" action="sendmail.php" enctype="multipart/form-data" id="myForm" autocomplete="off">
 				<span class="formLeft">
-					<h3>When would you like your appointment?</h3>
+					<h4>When would you like your appointment?</h4>
 				</span>
 				<br />
 				<span class="formRight" id="choice1">
@@ -1877,7 +1965,6 @@ a.forgot{
 						{
 							tempspan = document.createElement("span");
 							tempspan.appendChild(document.createTextNode(verboseweekday[dates[i].weekday]));
-							tempspan.appendChild(document.createElement("br"));
 							tempspan.appendChild(document.createTextNode(dates[i].date));
 
 							tempspan.onclick = createDates(dayCount, i);
@@ -1959,8 +2046,6 @@ a.forgot{
 					for (let i = 0; i < dates[n].hours.length; i++)
 					{
 						tempspan = document.createElement("span");
-						tempspan.appendChild(document.createElement("br"));
-						tempspan.appendChild(document.createElement("br"));
 
 						if(!dates[n].minutes[i])
 						{

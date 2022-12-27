@@ -500,7 +500,8 @@ ul {
     background-size: cover;
     background-repeat: no-repeat !important;
     margin: 7.5rem 0 0;
-    background-color: #eaf3fc;
+    /* background-color: #eaf3fc; */
+    background-image: url(../img/pet-login-slider.png);
 }
 .pet-parent-form-top{
     margin: 9rem 0 0;
@@ -849,7 +850,6 @@ section {
     display: flex;
     justify-content: space-between;
 }
-
 .doct-reviews a {
     background: #329EFF;
     color: #fff;
@@ -1510,5 +1510,286 @@ section {
     .pet-profile-card .dog-profile{
         width: 45px;
         height: 45px;
+    }
+}
+
+/* New CSS giving the form new look */
+#monthslist span, #monthslist64 span{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+#dateslist span,
+ #dateslist64 span,
+  #timelist span,
+   #timelist64 span,
+    #monthslist,
+     #monthslist64{
+            text-align: center; border: 1px solid #89cc90; border-radius: 6px;
+            margin: 5px 0;
+ }
+ .montharrow				{
+    font-size: 1.1em;
+    background-color: #89cc9044;
+}
+#formvetsnow span:hover:not(.selected),
+#formvetslater span:hover:not(.selected),
+#dateslist span:hover,
+#timelist span:hover,
+#choosedate #monthslist .montharrow:hover,
+#choosedate64 #monthslist64 .montharrow:hover,
+#choosedate64 #dateslist64 span:hover:not(.selected),
+#choosedate64 #timelist64 span:hover:not(.selected){
+    background-color: #89cc9088; 
+    cursor: pointer
+}
+#monthslist span:not(.montharrow){
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+#dateslist,#timelist,#dateslist64,#timelist64{
+    display: flex;
+    flex-wrap: wrap;
+}
+#dateslist span,#timelist64 span,#dateslist64 span,#timelist span{
+    margin: 5px 5px 0 0 !important;
+}
+#dateslist span.selected,#timelist span.selected,#dateslist64 span.selected,#timelist64 span.selected{
+    background-color: #89cc90 !important;
+    color: #fff;
+    text-shadow: none;
+    text-shadow: none !important;
+}
+#chooseVetnow .formvets span.selected, #chooseVetlater .formvets span.selected{
+    background-color: #89cc90 !important;
+}
+#timelist span,#timelist64 span{
+    width: 80px !important;
+    height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 5px;
+    margin: 5px 5px 0 0 !important;
+}
+#monthslist span.montharrow, #monthslist64 span.montharrow {
+    width: 6rem;
+    padding:0.5rem;
+}
+#monthslist,#monthslist64{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+#chooseVetnow .formvets span, #chooseVetlater .formvets span {
+    display: inline-block;
+    width: 32.96%;
+    text-align: left;
+    border: thin solid;
+    margin: 1px 1px;
+    padding: 7px;
+    position: relative;
+    padding: 16px;
+    min-height: 200px;
+}
+#chooseVetnow .formvets span div:nth-child(3), #chooseVetlater .formvets span div:nth-child(3){
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+#chooseVetnow .formvets span div:nth-child(3) img, #chooseVetlater .formvets span div:nth-child(3) img{
+    border:1px solid #000a;
+}
+#chooseVetnow .formvets span div:nth-child(3) .vetmiscellaneous h4,#chooseVetlater .formvets span div:nth-child(3) .vetmiscellaneous h4{
+    margin-left: 10px !important;
+    font-size: 12px !important;
+    color: #007bff !important;
+    font-weight: bold;
+}
+#chooseVetnow .formvets span::before, #chooseVetlater .formvets span::before{
+    content: '';
+    height: 18px;
+    width: 18px;
+    border-radius: 4px;
+    border: 1px solid #212529;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+#chooseVetnow .formvets span.selected::before, #chooseVetlater .formvets span.selected::before{
+    content: '\2713';
+}
+#chooseVetnow .formvets span.selected, #chooseVetlater .formvets span.selected{
+    text-shadow: none !important;
+}
+#chooseVetnow .formvets span h3, #chooseVetlater .formvets span h3{
+    font-weight: bold;
+    font-size: 18px !important;
+}
+#chooseVetnow .formvets span h3.learnmore, #chooseVetlater .formvets span h3.learnmore{
+    font-size: 12px !important;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+#choicecontainer, #chooseVetnow .formvets, #chooseVetlater .formvets {
+    width: 100% !important;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+#choicecontainer,
+#chooseVetnow .formvets,
+#chooseVetlater .formvets{
+    width: 100% !important; 
+    max-height: 563px !important; 
+    overflow-y: auto;
+}
+#chooseVetnow .formvets span div{
+    position: relative;
+}
+#chooseVetlater .formvets span div{
+    position: relative;
+}
+#chooseVetnow .formvets span div img, 
+#chooseVetlater .formvets span div img{
+    width: 50px;
+    height: 50px;
+}
+#customlightbox64 .availablenow{
+    position: relative; 
+    font-weight: bold;
+    text-align: center; 
+    color: white;
+    margin: unset !important;
+}
+#chooseVetnow .formvets .availablenow,
+#customlightbox64 .availablenow,
+#customlightbox64 span.availablenow{
+    background-color: #89cc90;
+    width: 120px !important;
+    border:1px solid #fff;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    margin: unset !important;
+    position: absolute !important;
+    top: 10px;
+    right: 32px;
+    white-space: nowrap;
+}
+#chooseVetnow .formvets span .vetmiscellaneous,
+#chooseVetlater .formvets span .vetmiscellaneous{
+    text-decoration: underline
+}
+#chooseVetnow .formvets span .learnmore,
+#chooseVetlater .formvets span .learnmore{
+    text-decoration: underline;
+    cursor: pointer;
+    width: max-content;
+}
+#formvetsnow span,
+#formvetslater span	{
+    background-color: rgba(255, 255, 255, 0.95);
+}
+#formvetsnow span:hover,
+#formvetslater span:hover{
+    background-color: #89cc90dd !important;
+}
+#customlightbox64{
+    position: fixed;
+    z-index: 1002; 
+    top: 40%; 
+    left: 50%; 
+    width: 400px;
+    background-color: #89cc90;
+    padding: 16px; 
+    margin-top: -160px; 
+    margin-left: -200px;
+    overflow: auto; 
+    border: 1px solid #0006; 
+    border-radius: 10px
+}
+
+#customlightbox64 h3{
+    font-size: 16px !important;
+    font-weight: bold;
+}
+#customlightbox64 h4{
+    font-size: 12px;
+    font-weight: bold;
+}
+#myForm #customlightbox64 .fullwidth{
+    width: 100%
+}
+#myForm #customlightbox64 span{
+    border: 1px solid #0006; 
+    border-radius: 8px; 
+    width: auto; 
+    font-size: 12px; 
+    padding: 4px
+}
+#customlightbox64 span.availablenow{
+    background-color: #89cc90 !important;
+    width: 120px !important;
+    border:1px solid #fff !important;
+    padding: 5px 10px !important;
+    border-radius: 20px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    margin: unset !important;
+    position: absolute !important;
+    top: 16px !important;
+    right: 48px !important;
+    white-space: nowrap !important;
+}
+#myForm #customlightbox64 #customlightbox64x{
+    font-size: 24px;  
+    width: 30px; 
+    height: 30px;
+    display: flex;
+    background-color: #fff8;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    color: red;
+    right: 10px;
+    top: 10px;
+}
+#myForm #customlightbox64 #customlightbox64x:hover{
+    background-color: #fff;
+}
+#choosedate64{
+    position: fixed; 
+    z-index: 1002; 
+    top: 74%; 
+    left: 50%; 
+    width: 400px;
+    background-color: #fff !important; 
+    padding: 16px; 
+    margin-top: -160px; 
+    margin-left: -200px;
+    overflow: auto; 
+    border: 1px solid black; 
+    border-radius: 10px
+}
+#choosedate64 h3{
+    font-size: 16px;
+    font-weight: bold;
+}
+@media screen and (max-width:767px) {
+    #monthslist span.montharrow, #monthslist64 span.montharrow {
+        width: 3rem !important;
+    }
+    #chooseVetnow .formvets span, 
+    #chooseVetlater .formvets span,
+    #formvetslater .formvets span,
+    #chooseVetnow .formvets span,
+    #formvetslater span{
+        width: 100% !important;
+        padding-top: 1rem;
     }
 }

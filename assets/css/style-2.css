@@ -1630,10 +1630,14 @@ section {
     font-weight: bold;
     font-size: 18px !important;
 }
+
 #chooseVetnow .formvets span h3.learnmore, #chooseVetlater .formvets span h3.learnmore{
     font-size: 12px !important;
     color: #007bff;
     margin-bottom: 5px;
+}
+#chooseVetnow .formvets span h4, #chooseVetlater .formvets span h4{
+    font-weight: bold;
 }
 #choicecontainer, #chooseVetnow .formvets, #chooseVetlater .formvets {
     width: 100% !important;

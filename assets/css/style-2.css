@@ -1549,6 +1549,7 @@ section {
 #dateslist,#timelist,#dateslist64,#timelist64{
     display: flex;
     flex-wrap: wrap;
+    margin: 1rem 0 !important;
 }
 #dateslist span,#timelist64 span,#dateslist64 span,#timelist span{
     margin: 5px 5px 0 0 !important;

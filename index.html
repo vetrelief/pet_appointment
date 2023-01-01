@@ -1528,7 +1528,7 @@ a.forgot{
 				var jsdate2 = new Date(jsdate.getFullYear(), month + 1, 0); //Incrementing month and zero day gets the last day of this month.
 				var verbosemonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 				var verboseweekday = ['SUN, ', 'MON, ', 'TUE, ', 'WED, ', 'THU, ', 'FRI, ', 'SAT, '];	//For selecting a date.
-				var verboseweekday2 = ['Sun, ', 'Mon, ', 'Tues, ', 'Wed, ', 'Thurs, ', 'Fri, ', 'Sat, '];	//For presenting the final selection.
+				var verboseweekday2 = ['Sun', 'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat'];	//For presenting the final selection.
 				var daysthismonth = jsdate2.getDate();
 				var numberdate = jsdate.getDate();
 				var numberdaysleftthismonth = daysthismonth - numberdate;
